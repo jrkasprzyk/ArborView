@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>ArborView</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-mark">◤</span>
+        <h1>ArborView</h1>
+        <span class="tagline">interactive CART visualizer</span>
+      </div>
+      <div class="controls">
+        <label>
+          Dataset
+          <select id="dataset-select"></select>
+        </label>
+        <span id="response-badge" class="badge"></span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="canvas">
+        <svg id="tree" role="img" aria-label="CART tree"></svg>
+        <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+      </section>
+      <aside class="sidebar">
+        <section class="panel">
+          <h2>Decision path</h2>
+          <ol id="breadcrumb" class="breadcrumb"><li class="muted">Hover or click a node.</li></ol>
+        </section>
+        <section class="panel">
+          <h2>Node detail</h2>
+          <div id="node-detail" class="node-detail"><p class="muted">Select a node to see details.</p></div>
+        </section>
+        <section class="panel">
+          <h2>Variable importance</h2>
+          <ul id="importance" class="importance"></ul>
+        </section>
+      </aside>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
