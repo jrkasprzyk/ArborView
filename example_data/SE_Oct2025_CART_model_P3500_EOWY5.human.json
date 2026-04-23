@@ -1,0 +1,41 @@
+{
+  "metadata": {
+    "file": "C:/GitHub/CRMMS_Data_Processing/Vulnerability Analysis/RDS Files/CART Models/SE_Oct2025_CART_model_P3500_EOWY5.rds",
+    "class": "rpart",
+    "names": ["frame", "where", "call", "terms", "cptable", "method", "parms", "control", "functions", "numresp", "splits", "variable.importance", "y", "ordered"],
+    "call": "rpart(formula = Class ~ ., data = cart_df, method = \"class\")",
+    "exported": "2026-04-22 18:11:49.765876"
+  },
+  "leaves": [
+    {
+      "node": 4,
+      "rule": "cumulative_EndOf_WY3< 23.11 & min_AMJJ_flow< 3.954",
+      "prediction": 1,
+      "n": 107
+    },
+    {
+      "node": 5,
+      "rule": "cumulative_EndOf_WY3< 23.11 & min_AMJJ_flow>=3.954",
+      "prediction": 2,
+      "n": 8
+    },
+    {
+      "node": 6,
+      "rule": "cumulative_EndOf_WY3>=23.11 & wy1_tot< 5.262",
+      "prediction": 1,
+      "n": 17
+    },
+    {
+      "node": 14,
+      "rule": "cumulative_EndOf_WY3>=23.11 & wy1_tot>=5.262 & cumulative_EndOf_WY5< 37.47",
+      "prediction": 1,
+      "n": 7
+    },
+    {
+      "node": 15,
+      "rule": "cumulative_EndOf_WY3>=23.11 & wy1_tot>=5.262 & cumulative_EndOf_WY5>=37.47",
+      "prediction": 2,
+      "n": 261
+    }
+  ]
+}

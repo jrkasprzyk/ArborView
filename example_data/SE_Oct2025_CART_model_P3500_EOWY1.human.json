@@ -1,0 +1,23 @@
+{
+  "metadata": {
+    "file": "C:/GitHub/CRMMS_Data_Processing/Vulnerability Analysis/RDS Files/CART Models/SE_Oct2025_CART_model_P3500_EOWY1.rds",
+    "class": "rpart",
+    "names": ["frame", "where", "call", "terms", "cptable", "method", "parms", "control", "functions", "numresp", "splits", "variable.importance", "y", "ordered"],
+    "call": "rpart(formula = Class ~ ., data = cart_df, method = \"class\")",
+    "exported": "2026-04-22 18:11:47.659034"
+  },
+  "leaves": [
+    {
+      "node": 2,
+      "rule": "wy1_tot< 4.268",
+      "prediction": 1,
+      "n": 23
+    },
+    {
+      "node": 3,
+      "rule": "wy1_tot>=4.268",
+      "prediction": 2,
+      "n": 377
+    }
+  ]
+}
