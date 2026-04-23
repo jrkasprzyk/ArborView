@@ -1,0 +1,19 @@
+{
+  "datasets": [
+    {
+      "id": "eowy5",
+      "label": "SE Oct2025 CART — EOWY5 (classification)",
+      "file": "EOWY5_classification.json"
+    },
+    {
+      "id": "eowy1",
+      "label": "SE Oct2025 CART — EOWY1 (shallow classification)",
+      "file": "EOWY1_classification.json"
+    },
+    {
+      "id": "mtcars",
+      "label": "mtcars mpg (regression)",
+      "file": "mtcars_regression.json"
+    }
+  ]
+}

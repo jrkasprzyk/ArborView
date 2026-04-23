@@ -1,0 +1,71 @@
+{
+  "schema": "arborview/tree@1",
+  "title": "SE Oct2025 CART P3500 EOWY1",
+  "method": "class",
+  "response": {
+    "type": "classification",
+    "levels": ["Failure", "Success"]
+  },
+  "variables": {
+    "predictors": [
+      "N_month_tot", "wy1_tot", "wy2_tot", "wy3_tot", "wy4_tot", "wy5_tot",
+      "cumulative_EndOf_WY1", "cumulative_EndOf_WY2", "cumulative_EndOf_WY3",
+      "cumulative_EndOf_WY4", "cumulative_EndOf_WY5",
+      "min_WY_flow", "min_AMJJ_flow", "monthly_avg", "full_WYs_avg",
+      "wy_minus2_tot", "wy_minus1_tot", "pre_mdl_cumulative"
+    ],
+    "importance": {
+      "wy1_tot": 22.5
+    }
+  },
+  "call": "rpart(formula = Class ~ ., data = cart_df, method = \"class\")",
+  "tree": {
+    "node_id": 1,
+    "depth": 0,
+    "n": 400,
+    "weight": 400,
+    "deviance": 23,
+    "complexity": 0.95,
+    "is_leaf": false,
+    "predicted_class": "Success",
+    "class_counts": [23, 377],
+    "class_probs": [0.0575, 0.9425],
+    "node_prob": 1,
+    "impurity": 0.108388,
+    "split_var": "wy1_tot",
+    "split": {"type": "numeric", "threshold": 4.268, "left_op": "<", "right_op": ">="},
+    "rule_from_root": [],
+    "children": [
+      {
+        "node_id": 2,
+        "depth": 1,
+        "n": 23,
+        "weight": 23,
+        "deviance": 0,
+        "complexity": 0.01,
+        "is_leaf": true,
+        "predicted_class": "Failure",
+        "class_counts": [23, 0],
+        "class_probs": [1.0, 0.0],
+        "node_prob": 0.0575,
+        "impurity": 0.0,
+        "rule_from_root": ["wy1_tot < 4.268"]
+      },
+      {
+        "node_id": 3,
+        "depth": 1,
+        "n": 377,
+        "weight": 377,
+        "deviance": 0,
+        "complexity": 0.01,
+        "is_leaf": true,
+        "predicted_class": "Success",
+        "class_counts": [0, 377],
+        "class_probs": [0.0, 1.0],
+        "node_prob": 0.9425,
+        "impurity": 0.0,
+        "rule_from_root": ["wy1_tot >= 4.268"]
+      }
+    ]
+  }
+}

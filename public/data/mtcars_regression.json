@@ -1,0 +1,117 @@
+{
+  "schema": "arborview/tree@1",
+  "title": "mtcars: mpg ~ wt + hp + cyl",
+  "method": "anova",
+  "response": {
+    "type": "regression",
+    "levels": null
+  },
+  "variables": {
+    "predictors": ["wt", "hp", "cyl", "disp", "drat", "qsec"],
+    "importance": {
+      "wt": 847.7,
+      "disp": 820.3,
+      "cyl": 785.6,
+      "hp": 732.9,
+      "drat": 415.2,
+      "qsec": 183.4
+    }
+  },
+  "call": "rpart(formula = mpg ~ ., data = mtcars, method = \"anova\")",
+  "tree": {
+    "node_id": 1,
+    "depth": 0,
+    "n": 32,
+    "weight": 32,
+    "deviance": 1126.05,
+    "complexity": 0.643,
+    "is_leaf": false,
+    "predicted_value": 20.09,
+    "impurity": 35.19,
+    "split_var": "wt",
+    "split": {"type": "numeric", "threshold": 2.26, "left_op": "<", "right_op": ">="},
+    "rule_from_root": [],
+    "children": [
+      {
+        "node_id": 2,
+        "depth": 1,
+        "n": 6,
+        "weight": 6,
+        "deviance": 58.59,
+        "complexity": 0.01,
+        "is_leaf": true,
+        "predicted_value": 30.07,
+        "impurity": 9.77,
+        "rule_from_root": ["wt < 2.26"]
+      },
+      {
+        "node_id": 3,
+        "depth": 1,
+        "n": 26,
+        "weight": 26,
+        "deviance": 295.70,
+        "complexity": 0.174,
+        "is_leaf": false,
+        "predicted_value": 17.79,
+        "impurity": 11.37,
+        "split_var": "cyl",
+        "split": {"type": "numeric", "threshold": 7.0, "left_op": "<", "right_op": ">="},
+        "rule_from_root": ["wt >= 2.26"],
+        "children": [
+          {
+            "node_id": 6,
+            "depth": 2,
+            "n": 12,
+            "weight": 12,
+            "deviance": 51.19,
+            "complexity": 0.01,
+            "is_leaf": true,
+            "predicted_value": 20.98,
+            "impurity": 4.27,
+            "rule_from_root": ["wt >= 2.26", "cyl < 7"]
+          },
+          {
+            "node_id": 7,
+            "depth": 2,
+            "n": 14,
+            "weight": 14,
+            "deviance": 85.20,
+            "complexity": 0.035,
+            "is_leaf": false,
+            "predicted_value": 15.10,
+            "impurity": 6.09,
+            "split_var": "hp",
+            "split": {"type": "numeric", "threshold": 192.5, "left_op": "<", "right_op": ">="},
+            "rule_from_root": ["wt >= 2.26", "cyl >= 7"],
+            "children": [
+              {
+                "node_id": 14,
+                "depth": 3,
+                "n": 7,
+                "weight": 7,
+                "deviance": 22.06,
+                "complexity": 0.01,
+                "is_leaf": true,
+                "predicted_value": 16.79,
+                "impurity": 3.15,
+                "rule_from_root": ["wt >= 2.26", "cyl >= 7", "hp < 192.5"]
+              },
+              {
+                "node_id": 15,
+                "depth": 3,
+                "n": 7,
+                "weight": 7,
+                "deviance": 25.85,
+                "complexity": 0.01,
+                "is_leaf": true,
+                "predicted_value": 13.41,
+                "impurity": 3.69,
+                "rule_from_root": ["wt >= 2.26", "cyl >= 7", "hp >= 192.5"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "schema": "arborview/tree@1",
+  "title": "SE Oct2025 CART P3500 EOWY5",
+  "method": "class",
+  "response": {
+    "type": "classification",
+    "levels": ["Failure", "Success"]
+  },
+  "variables": {
+    "predictors": [
+      "N_month_tot", "wy1_tot", "wy2_tot", "wy3_tot", "wy4_tot", "wy5_tot",
+      "cumulative_EndOf_WY1", "cumulative_EndOf_WY2", "cumulative_EndOf_WY3",
+      "cumulative_EndOf_WY4", "cumulative_EndOf_WY5",
+      "min_WY_flow", "min_AMJJ_flow", "monthly_avg", "full_WYs_avg",
+      "wy_minus2_tot", "wy_minus1_tot", "pre_mdl_cumulative"
+    ],
+    "importance": {
+      "cumulative_EndOf_WY3": 121.155244,
+      "cumulative_EndOf_WY4": 96.703716,
+      "cumulative_EndOf_WY2": 93.700137,
+      "cumulative_EndOf_WY5": 87.930658,
+      "monthly_avg": 87.930658,
+      "full_WYs_avg": 86.883918,
+      "cumulative_EndOf_WY1": 16.399687,
+      "wy1_tot": 16.399687,
+      "min_AMJJ_flow": 8.373913,
+      "min_WY_flow": 7.327174,
+      "wy4_tot": 1.046739
+    }
+  },
+  "call": "rpart(formula = Class ~ ., data = cart_df, method = \"class\")",
+  "tree": {
+    "node_id": 1,
+    "depth": 0,
+    "n": 400,
+    "weight": 400,
+    "deviance": 135,
+    "complexity": 0.762963,
+    "is_leaf": false,
+    "predicted_class": "Success",
+    "class_counts": [135, 265],
+    "class_probs": [0.3375, 0.6625],
+    "node_prob": 1,
+    "impurity": 0.447187,
+    "split_var": "cumulative_EndOf_WY3",
+    "split": {"type": "numeric", "threshold": 23.113826, "left_op": "<", "right_op": ">="},
+    "rule_from_root": [],
+    "children": [
+      {
+        "node_id": 2,
+        "depth": 1,
+        "n": 115,
+        "weight": 115,
+        "deviance": 6,
+        "complexity": 0.029630,
+        "is_leaf": false,
+        "predicted_class": "Failure",
+        "class_counts": [109, 6],
+        "class_probs": [0.947826, 0.052174],
+        "node_prob": 0.2875,
+        "impurity": 0.098904,
+        "split_var": "min_AMJJ_flow",
+        "split": {"type": "numeric", "threshold": 3.954134, "left_op": "<", "right_op": ">="},
+        "rule_from_root": ["cumulative_EndOf_WY3 < 23.11"],
+        "children": [
+          {
+            "node_id": 4,
+            "depth": 2,
+            "n": 107,
+            "weight": 107,
+            "deviance": 0,
+            "complexity": 0.01,
+            "is_leaf": true,
+            "predicted_class": "Failure",
+            "class_counts": [107, 0],
+            "class_probs": [1.0, 0.0],
+            "node_prob": 0.2675,
+            "impurity": 0.0,
+            "rule_from_root": ["cumulative_EndOf_WY3 < 23.11", "min_AMJJ_flow < 3.954"]
+          },
+          {
+            "node_id": 5,
+            "depth": 2,
+            "n": 8,
+            "weight": 8,
+            "deviance": 2,
+            "complexity": 0.01,
+            "is_leaf": true,
+            "predicted_class": "Success",
+            "class_counts": [2, 6],
+            "class_probs": [0.25, 0.75],
+            "node_prob": 0.02,
+            "impurity": 0.375,
+            "rule_from_root": ["cumulative_EndOf_WY3 < 23.11", "min_AMJJ_flow >= 3.954"]
+          }
+        ]
+      },
+      {
+        "node_id": 3,
+        "depth": 1,
+        "n": 285,
+        "weight": 285,
+        "deviance": 26,
+        "complexity": 0.066667,
+        "is_leaf": false,
+        "predicted_class": "Success",
+        "class_counts": [26, 259],
+        "class_probs": [0.091228, 0.908772],
+        "node_prob": 0.7125,
+        "impurity": 0.165828,
+        "split_var": "wy1_tot",
+        "split": {"type": "numeric", "threshold": 5.262068, "left_op": "<", "right_op": ">="},
+        "rule_from_root": ["cumulative_EndOf_WY3 >= 23.11"],
+        "children": [
+          {
+            "node_id": 6,
+            "depth": 2,
+            "n": 17,
+            "weight": 17,
+            "deviance": 4,
+            "complexity": 0.01,
+            "is_leaf": true,
+            "predicted_class": "Failure",
+            "class_counts": [13, 4],
+            "class_probs": [0.764706, 0.235294],
+            "node_prob": 0.0425,
+            "impurity": 0.359862,
+            "rule_from_root": ["cumulative_EndOf_WY3 >= 23.11", "wy1_tot < 5.262"]
+          },
+          {
+            "node_id": 7,
+            "depth": 2,
+            "n": 268,
+            "weight": 268,
+            "deviance": 13,
+            "complexity": 0.022222,
+            "is_leaf": false,
+            "predicted_class": "Success",
+            "class_counts": [13, 255],
+            "class_probs": [0.048507, 0.951493],
+            "node_prob": 0.67,
+            "impurity": 0.092311,
+            "split_var": "cumulative_EndOf_WY5",
+            "split": {"type": "numeric", "threshold": 37.465234, "left_op": "<", "right_op": ">="},
+            "rule_from_root": ["cumulative_EndOf_WY3 >= 23.11", "wy1_tot >= 5.262"],
+            "children": [
+              {
+                "node_id": 14,
+                "depth": 3,
+                "n": 7,
+                "weight": 7,
+                "deviance": 2,
+                "complexity": 0.01,
+                "is_leaf": true,
+                "predicted_class": "Failure",
+                "class_counts": [5, 2],
+                "class_probs": [0.714286, 0.285714],
+                "node_prob": 0.0175,
+                "impurity": 0.408163,
+                "rule_from_root": ["cumulative_EndOf_WY3 >= 23.11", "wy1_tot >= 5.262", "cumulative_EndOf_WY5 < 37.47"]
+              },
+              {
+                "node_id": 15,
+                "depth": 3,
+                "n": 261,
+                "weight": 261,
+                "deviance": 8,
+                "complexity": 0,
+                "is_leaf": true,
+                "predicted_class": "Success",
+                "class_counts": [8, 253],
+                "class_probs": [0.030651, 0.969349],
+                "node_prob": 0.6525,
+                "impurity": 0.059434,
+                "rule_from_root": ["cumulative_EndOf_WY3 >= 23.11", "wy1_tot >= 5.262", "cumulative_EndOf_WY5 >= 37.47"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
