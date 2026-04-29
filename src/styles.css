@@ -241,6 +241,8 @@ html, body {
   stroke-width: 2.25;
 }
 .node.dimmed { opacity: 0.35; }
+.node { cursor: grab; }
+.node.dragging { cursor: grabbing; }
 .node text.node-label {
   font-family: var(--mono);
   font-size: 10.5px;

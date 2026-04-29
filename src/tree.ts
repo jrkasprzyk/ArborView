@@ -62,7 +62,12 @@ export function renderTree(svg: SVGSVGElement, arbor: Arbor, events: TreeEvents)
   const depth = root.height + 1;  // number of levels in the tree
 
   // Spacing between nodes (in SVG user units, which are roughly pixels here).
-  const nodeSepX = 72;   // horizontal gap between sibling nodes
+  // Horizontal gap expands to fit the widest label so sibling text doesn't
+  // overlap.  6.5 ≈ px-per-char for 10.5px monospace; +24 adds breathing room.
+  const maxLineLen = Math.max(
+    ...root.descendants().flatMap((d) => labelLines(d.data, arbor).map((l) => l.length)),
+  );
+  const nodeSepX = Math.max(90, Math.ceil(maxLineLen * 6.5) + 24);
   const nodeSepY = 110;  // vertical gap between levels
 
   const height = Math.max(320, depth * nodeSepY);
@@ -171,7 +176,10 @@ export function renderTree(svg: SVGSVGElement, arbor: Arbor, events: TreeEvents)
 
   // Each edge shows the condition that routes an observation to that child.
   // We skip depth=0 (root) because the root has no incoming edge.
-  g.append("g")
+  // Saved to splitLabelSel so the drag handler can reposition labels when a
+  // node is moved.
+  const splitLabelSel = g
+    .append("g")
     .attr("class", "split-labels")
     .selectAll("text")
     .data(laid.descendants().filter((d) => d.depth > 0))
@@ -219,13 +227,24 @@ export function renderTree(svg: SVGSVGElement, arbor: Arbor, events: TreeEvents)
     }
   });
 
-  // Draw text label below each node showing prediction + sample count.
-  nodeGroups
-    .append("text")
-    .attr("class", "node-label")
-    .attr("text-anchor", "middle")
-    .attr("dy", (d) => radius(d.data.n) + 12)  // push text below the node shape
-    .text((d) => labelFor(d, arbor));
+  // Draw text label(s) below each node.
+  // Leaf nodes use two <tspan> lines; internal nodes use one.
+  nodeGroups.each(function (d) {
+    const lines = labelLines(d.data, arbor);
+    const baseOffset = radius(d.data.n) + 12;  // px below the node shape
+    const txt = d3
+      .select(this)
+      .append("text")
+      .attr("class", "node-label")
+      .attr("text-anchor", "middle");
+    lines.forEach((line, i) => {
+      txt
+        .append("tspan")
+        .attr("x", 0)
+        .attr("dy", i === 0 ? baseOffset : "1.2em")
+        .text(line);
+    });
+  });
 
   // ---------------------------------------------------------------------------
   // Interactions
@@ -246,6 +265,39 @@ export function renderTree(svg: SVGSVGElement, arbor: Arbor, events: TreeEvents)
       nodeGroups.classed("selected", (n) => n === d);
       events.onSelect(d);
     });
+
+  // ---------------------------------------------------------------------------
+  // Drag to reposition individual nodes
+  // ---------------------------------------------------------------------------
+  // Dragging a node updates its x/y on the hierarchy object, then redraws
+  // the node's <g> transform and any links/edge-labels touching that node.
+  // This lets users manually separate overlapping labels without changing
+  // the tree structure.
+
+  nodeGroups.call(
+    d3
+      .drag<SVGGElement, Hier>()
+      .on("start", function () {
+        d3.select(this).classed("dragging", true).raise();
+      })
+      .on("drag", function (event, d) {
+        d.x += event.dx;
+        d.y += event.dy;
+        d3.select(this).attr("transform", `translate(${d.x},${d.y})`);
+        // Redraw edges that touch this node (above and below).
+        linkSel
+          .filter((l) => l.source === d || l.target === d)
+          .attr("d", (l) => linkPath(l));
+        // Reposition edge-midpoint labels for edges above and below this node.
+        splitLabelSel
+          .filter((n) => n === d || n.parent === d)
+          .attr("x", (n) => (n.x + (n.parent?.x ?? n.x)) / 2)
+          .attr("y", (n) => (n.y + (n.parent?.y ?? n.y)) / 2 - 4);
+      })
+      .on("end", function () {
+        d3.select(this).classed("dragging", false);
+      }),
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -263,19 +315,25 @@ function edgeRuleText(d: Hier): string {
 }
 
 /**
- * Return the display text shown below each node:
- *   - Leaf nodes show the prediction and sample count.
- *   - Internal nodes show the split condition (e.g. "age < 12.5").
+ * Return the lines of text shown below each node.
+ * Leaf nodes split into two lines so the label takes less horizontal space:
+ *   line 1 — predicted class/value   (add more fields here if needed)
+ *   line 2 — sample count
+ * Internal nodes return a single line with the split condition.
+ *
+ * To show additional data under a node, extend the returned array here.
+ * For leaf nodes add to the array before the `(n=...)` entry.
+ * For internal nodes the single element is the split condition.
  */
-function labelFor(d: Hier, arbor: Arbor): string {
-  if (d.data.is_leaf) {
+function labelLines(node: TreeNode, arbor: Arbor): string[] {
+  if (node.is_leaf) {
     if (arbor.response.type === "classification") {
-      return `${d.data.predicted_class ?? ""} (n=${d.data.n})`;
+      return [node.predicted_class ?? "", `(n=${node.n})`];
     }
-    const v = d.data.predicted_value;
-    return `ŷ=${v !== undefined ? v.toFixed(2) : "?"} (n=${d.data.n})`;
+    const v = node.predicted_value;
+    return [`ŷ=${v !== undefined ? v.toFixed(2) : "?"}`, `(n=${node.n})`];
   }
-  return splitLabel(d.data);
+  return [splitLabel(node)];
 }
 
 /**
