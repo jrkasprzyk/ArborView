@@ -20,6 +20,41 @@ An interactive web-based visualization tool for CART decision trees built with R
 - **Node.js** (v18+) and npm
 - **R** with packages: `rpart`, `jsonlite`, `partykit`
 
+## Installing Node.js and npm
+
+npm is bundled with Node.js. Install Node.js (v18+) for your platform:
+
+### Mac
+
+```bash
+brew install node
+```
+
+If Homebrew is not installed, get it at https://brew.sh first. Alternatively, download the macOS installer directly from https://nodejs.org.
+
+### Windows (Command Prompt)
+
+```cmd
+winget install OpenJS.NodeJS
+```
+
+Then close and reopen Command Prompt so `node` and `npm` are on your PATH. Alternatively, download the Windows installer from https://nodejs.org and run it.
+
+### Windows (PowerShell)
+
+```powershell
+winget install OpenJS.NodeJS
+```
+
+Then close and reopen PowerShell so `node` and `npm` are on your PATH. Alternatively, download the Windows installer from https://nodejs.org and run it.
+
+Verify the install on any platform:
+
+```bash
+node --version
+npm --version
+```
+
 ## Installation
 
 ```bash
