@@ -75,6 +75,9 @@ bootstrap().catch((err) => {
 
 async function bootstrap(): Promise<void> {
   // Step 1: fetch the manifest (a small JSON file listing all available datasets).
+  // Note: to add a remove a dataset, someone must manually edit the manifest,
+  // adding an entry with the matching id, label, and file fields, then placing the
+  // corresponding data file in the public/data/ directory.
   const manifest: Manifest = await fetchJson("data/manifest.json");
 
   if (manifest.datasets.length === 0) {
