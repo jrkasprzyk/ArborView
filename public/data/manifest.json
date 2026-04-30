@@ -10,6 +10,11 @@
       "label": "SE Oct2025 CART — EOWY2 (classification)",
       "file": "EOWY2_classification.json"
     },
+		{
+      "id": "eowy3",
+      "label": "SE Oct2025 CART — EOWY3 (classification)",
+      "file": "EOWY3_classification.json"
+    },
 	{
       "id": "eowy5",
       "label": "SE Oct2025 CART — EOWY5 (classification)",

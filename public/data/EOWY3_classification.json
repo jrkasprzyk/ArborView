@@ -1,0 +1,263 @@
+{
+  "schema": "arborview/tree@1",
+  "title": "SE Oct2025 CART P3500 - EOWY3",
+  "method": "class",
+  "response": {
+    "type": "classification",
+    "levels": [
+      "Failure",
+      "Success"
+    ]
+  },
+  "variables": {
+    "predictors": [
+      "N_month_tot",
+      "wy1_tot",
+      "wy2_tot",
+      "wy3_tot",
+      "cumulative_EndOf_WY1",
+      "cumulative_EndOf_WY2",
+      "cumulative_EndOf_WY3",
+      "min_WY_flow",
+      "min_AMJJ_flow",
+      "monthly_avg",
+      "full_WYs_avg",
+      "wy_minus2_tot",
+      "wy_minus1_tot",
+      "pre_mdl_cumulative"
+    ],
+    "importance": {
+      "cumulative_EndOf_WY2": 108.814075,
+      "cumulative_EndOf_WY3": 84.882216,
+      "full_WYs_avg": 84.882216,
+      "monthly_avg": 84.882216,
+      "wy2_tot": 53.468985,
+      "min_WY_flow": 52.926974,
+      "cumulative_EndOf_WY1": 9.551091,
+      "wy1_tot": 9.551091,
+      "min_AMJJ_flow": 7.442958,
+      "wy3_tot": 0.465185
+    }
+  },
+  "cptable": [
+    {
+      "CP": 0.736842,
+      "nsplit": 0,
+      "rel error": 1,
+      "xerror": 1,
+      "xstd": 0.079196
+    },
+    {
+      "CP": 0.035088,
+      "nsplit": 1,
+      "rel error": 0.263158,
+      "xerror": 0.289474,
+      "xstd": 0.048268
+    },
+    {
+      "CP": 0.026316,
+      "nsplit": 2,
+      "rel error": 0.22807,
+      "xerror": 0.359649,
+      "xstd": 0.053211
+    },
+    {
+      "CP": 0.01,
+      "nsplit": 3,
+      "rel error": 0.201754,
+      "xerror": 0.27193,
+      "xstd": 0.046909
+    }
+  ],
+  "call": "rpart(formula = Class ~ ., data = cart_df, method = \"class\")",
+  "tree": {
+    "node_id": 1,
+    "depth": 0,
+    "n": 400,
+    "weight": 400,
+    "deviance": 114,
+    "complexity": 0.736842,
+    "is_leaf": false,
+    "predicted_class": "Success",
+    "class_counts": [
+      114,
+      286
+    ],
+    "class_probs": [
+      0.285,
+      0.715
+    ],
+    "node_prob": 1,
+    "impurity": 0.40755,
+    "split_var": "cumulative_EndOf_WY2",
+    "split": {
+      "type": "numeric",
+      "threshold": 14.592663,
+      "left_op": "<",
+      "right_op": ">="
+    },
+    "rule_from_root": [],
+    "children": [
+      {
+        "node_id": 2,
+        "depth": 1,
+        "n": 116,
+        "weight": 116,
+        "deviance": 16,
+        "complexity": 0.026316,
+        "is_leaf": false,
+        "predicted_class": "Failure",
+        "class_counts": [
+          100,
+          16
+        ],
+        "class_probs": [
+          0.862069,
+          0.137931
+        ],
+        "node_prob": 0.29,
+        "impurity": 0.237812,
+        "split_var": "min_WY_flow",
+        "split": {
+          "type": "numeric",
+          "threshold": 5.569822,
+          "left_op": "<",
+          "right_op": ">="
+        },
+        "rule_from_root": [
+          "cumulative_EndOf_WY2 < 14.59"
+        ],
+        "children": [
+          {
+            "node_id": 4,
+            "depth": 2,
+            "n": 97,
+            "weight": 97,
+            "deviance": 5,
+            "complexity": 0.008772,
+            "is_leaf": true,
+            "predicted_class": "Failure",
+            "class_counts": [
+              92,
+              5
+            ],
+            "class_probs": [
+              0.948454,
+              0.051546
+            ],
+            "node_prob": 0.2425,
+            "impurity": 0.097779,
+            "rule_from_root": [
+              "cumulative_EndOf_WY2 < 14.59",
+              "min_WY_flow <  5.57"
+            ]
+          },
+          {
+            "node_id": 5,
+            "depth": 2,
+            "n": 19,
+            "weight": 19,
+            "deviance": 8,
+            "complexity": 0.01,
+            "is_leaf": true,
+            "predicted_class": "Success",
+            "class_counts": [
+              8,
+              11
+            ],
+            "class_probs": [
+              0.421053,
+              0.578947
+            ],
+            "node_prob": 0.0475,
+            "impurity": 0.487535,
+            "rule_from_root": [
+              "cumulative_EndOf_WY2 < 14.59",
+              "min_WY_flow >=  5.57"
+            ]
+          }
+        ]
+      },
+      {
+        "node_id": 3,
+        "depth": 1,
+        "n": 284,
+        "weight": 284,
+        "deviance": 14,
+        "complexity": 0.035088,
+        "is_leaf": false,
+        "predicted_class": "Success",
+        "class_counts": [
+          14,
+          270
+        ],
+        "class_probs": [
+          0.049296,
+          0.950704
+        ],
+        "node_prob": 0.71,
+        "impurity": 0.093731,
+        "split_var": "wy1_tot",
+        "split": {
+          "type": "numeric",
+          "threshold": 5.262068,
+          "left_op": "<",
+          "right_op": ">="
+        },
+        "rule_from_root": [
+          "cumulative_EndOf_WY2 >= 14.59"
+        ],
+        "children": [
+          {
+            "node_id": 6,
+            "depth": 2,
+            "n": 12,
+            "weight": 12,
+            "deviance": 4,
+            "complexity": 0.01,
+            "is_leaf": true,
+            "predicted_class": "Failure",
+            "class_counts": [
+              8,
+              4
+            ],
+            "class_probs": [
+              0.666667,
+              0.333333
+            ],
+            "node_prob": 0.03,
+            "impurity": 0.444444,
+            "rule_from_root": [
+              "cumulative_EndOf_WY2 >= 14.59",
+              "wy1_tot < 5.262"
+            ]
+          },
+          {
+            "node_id": 7,
+            "depth": 2,
+            "n": 272,
+            "weight": 272,
+            "deviance": 6,
+            "complexity": 0,
+            "is_leaf": true,
+            "predicted_class": "Success",
+            "class_counts": [
+              6,
+              266
+            ],
+            "class_probs": [
+              0.022059,
+              0.977941
+            ],
+            "node_prob": 0.68,
+            "impurity": 0.043144,
+            "rule_from_root": [
+              "cumulative_EndOf_WY2 >= 14.59",
+              "wy1_tot >= 5.262"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
