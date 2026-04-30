@@ -55,6 +55,39 @@ node --version
 npm --version
 ```
 
+## Adding Rscript to PATH
+
+`Rscript` is installed with R and is needed when exporting a model from the command line. Verify that it is already available:
+
+```bash
+Rscript --version
+```
+
+If that command is not found, add the directory containing `Rscript.exe` to your PATH. On Windows, it is usually in a versioned R install directory such as:
+
+```text
+C:\Program Files\R\R-4.x.x\bin
+```
+
+If you are not sure which version is installed, locate it from PowerShell:
+
+```powershell
+Get-ChildItem "C:\Program Files\R" -Recurse -Filter Rscript.exe
+```
+
+Then add the `bin` directory to your user PATH:
+
+1. Open Start and search for **Edit environment variables for your account**.
+2. Select **Environment Variables**, then under **User variables** select `Path` and choose **Edit**.
+3. Choose **New** and add the R `bin` directory, for example `C:\Program Files\R\R-4.x.x\bin`.
+4. Select **OK** to save, then close and reopen your terminal.
+
+Verify the update:
+
+```powershell
+Rscript --version
+```
+
 ## Installation
 
 ```bash
