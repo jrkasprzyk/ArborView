@@ -19,7 +19,7 @@ import DOMPurify from "dompurify";
 import type { Arbor, Manifest, ManifestEntry, Performance, TreeNode } from "./types";
 import { renderTree } from "./tree";
 import { positionTooltip, renderTooltip, splitLabel } from "./tooltip";
-import { escapeHtml, formatNum } from "./utils";
+import { escapeHtml, formatNum, semanticColor } from "./utils";
 
 // D3 adds x/y coordinates to each TreeNode when it lays out the tree.
 // "Hier" is shorthand for that augmented type.
@@ -352,8 +352,8 @@ function showDetail(node: Hier): void {
     currentArbor.response.levels
   ) {
     const levels = currentArbor.response.levels;
-    // Use the same Tableau 10 colour palette as the tree nodes so colours match.
-    const color = d3.scaleOrdinal<string, string>().domain(levels).range(d3.schemeTableau10);
+    // Use the same colour palette as the tree nodes so colours match.
+    const color = d3.scaleOrdinal<string, string>().domain(levels).range(levels.map((lvl, i) => semanticColor(lvl) ?? d3.schemeTableau10[i % 10]));
     const rowsHtml = levels
       .map((lvl, i) => {
         const p = d.class_probs![i] ?? 0;

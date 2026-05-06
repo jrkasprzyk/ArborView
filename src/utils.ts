@@ -4,6 +4,24 @@
  * logic, you only need to change it once.
  */
 
+let _semanticCache: Record<string, string> | null = null;
+
+function semanticColors(): Record<string, string> {
+  if (!_semanticCache) {
+    const s = getComputedStyle(document.documentElement);
+    _semanticCache = {
+      Success: s.getPropertyValue("--success").trim(),
+      Failure: s.getPropertyValue("--failure").trim(),
+    };
+  }
+  return _semanticCache;
+}
+
+/** Return a semantic colour for well-known class names, or undefined to fall back to Tableau10. */
+export function semanticColor(className: string): string | undefined {
+  return semanticColors()[className];
+}
+
 /**
  * Format a number for display.
  * - Returns "—" for non-finite values (NaN, Infinity).

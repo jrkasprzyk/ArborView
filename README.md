@@ -163,6 +163,19 @@ ArborView/
 └── index.html
 ```
 
+## Customization
+
+### Class colours
+
+The colours used for `Success` and `Failure` class labels are driven by two CSS custom properties at the top of `src/styles.css`:
+
+```css
+--success: #2f855a;
+--failure: #b03a2e;
+```
+
+Changing these values updates every place the colours appear — tree nodes, the class probability bars in the node detail panel, and the confusion matrix highlights — in one edit. The mapping from class name to CSS variable lives in `src/utils.ts` (`semanticColors()`); add entries there to assign semantic colours to other class names.
+
 ## JSON Schema
 
 `arborview_export()` writes a single JSON file per model. Here is what each part of that file contains.
