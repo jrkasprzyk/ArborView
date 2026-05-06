@@ -31,19 +31,89 @@ parse_performance_txt <- function(path) {
   # Prediction Failure Success
   #    Failure      19       4
   #    Success       0     377
-  ref_idx    <- grep("^\\s*Reference\\s*$", lines)
-  header_idx <- ref_idx + 1
-  header     <- trimws(lines[header_idx])
+  ref_idx <- grep("^\\s*Reference\\s*$", lines)
+  if (length(ref_idx) != 1) {
+    stop(
+      sprintf(
+        "Performance file '%s' is not in the expected caret confusionMatrix text format: expected exactly one 'Reference' line, found %d.",
+        path, length(ref_idx)
+      ),
+      call. = FALSE
+    )
+  }
+
+  header_idx <- ref_idx + 1L
+  if (header_idx > length(lines)) {
+    stop(
+      sprintf(
+        "Performance file '%s' is not in the expected caret confusionMatrix text format: missing header line after 'Reference'.",
+        path
+      ),
+      call. = FALSE
+    )
+  }
+
+  header <- trimws(lines[header_idx])
+  if (!grepl("^Prediction\\s+", header)) {
+    stop(
+      sprintf(
+        "Performance file '%s' is not in the expected caret confusionMatrix text format: header after 'Reference' must begin with 'Prediction'.",
+        path
+      ),
+      call. = FALSE
+    )
+  }
 
   # Class labels follow the word "Prediction" on the header line
   labels <- strsplit(sub("^Prediction\\s+", "", header), "\\s+")[[1]]
   n      <- length(labels)
+  if (n < 1) {
+    stop(
+      sprintf(
+        "Performance file '%s' is not in the expected caret confusionMatrix text format: no class labels found on the 'Prediction' header line.",
+        path
+      ),
+      call. = FALSE
+    )
+  }
 
   mat <- matrix(0L, nrow = n, ncol = n)
   for (i in seq_len(n)) {
-    row_line   <- lines[header_idx + i]
-    nums_str   <- sub(paste0("^\\s*", labels[i], "\\s+"), "", row_line)
-    mat[i, ]   <- as.integer(strsplit(trimws(nums_str), "\\s+")[[1]])
+    row_idx <- header_idx + i
+    if (row_idx > length(lines)) {
+      stop(
+        sprintf(
+          "Performance file '%s' is not in the expected caret confusionMatrix text format: missing confusion matrix row %d for class '%s'.",
+          path, i, labels[i]
+        ),
+        call. = FALSE
+      )
+    }
+
+    row_line <- lines[row_idx]
+    if (!grepl(paste0("^\\s*", labels[i], "\\s+"), row_line)) {
+      stop(
+        sprintf(
+          "Performance file '%s' is not in the expected caret confusionMatrix text format: expected confusion matrix row for class '%s'.",
+          path, labels[i]
+        ),
+        call. = FALSE
+      )
+    }
+
+    nums_str <- sub(paste0("^\\s*", labels[i], "\\s+"), "", row_line)
+    nums     <- as.integer(strsplit(trimws(nums_str), "\\s+")[[1]])
+    if (length(nums) != n || any(is.na(nums))) {
+      stop(
+        sprintf(
+          "Performance file '%s' is not in the expected caret confusionMatrix text format: row for class '%s' must contain exactly %d integer value(s).",
+          path, labels[i], n
+        ),
+        call. = FALSE
+      )
+    }
+
+    mat[i, ] <- nums
   }
 
   # --- Statistics section ---
