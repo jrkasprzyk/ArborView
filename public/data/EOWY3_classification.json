@@ -294,5 +294,5 @@
     "detection_prevalence": 0.2725,
     "balanced_accuracy": 0.9229
   },
-  "failure_definition": "A trace is considered a"
+  "failure_definition": "Powell pool elevation falls below 3500' at least once before EOWY3"
 }
