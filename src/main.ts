@@ -437,7 +437,9 @@ function renderPerformance(perf: Performance | undefined): void {
     </div>`;
 
   const ci = perf.accuracy_ci;
-  const ciStr = `(${(ci[0] * 100).toFixed(1)}–${(ci[1] * 100).toFixed(1)}%)`;
+  const ciStr = ci[0] != null && ci[1] != null
+    ? `(${(ci[0] * 100).toFixed(1)}–${(ci[1] * 100).toFixed(1)}%)`
+    : "";
   const statsRows: [string, string][] = [
     ["accuracy",      `${(perf.accuracy * 100).toFixed(1)}% ${ciStr}`],
     ["kappa",         formatNum(perf.kappa, 4)],
