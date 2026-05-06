@@ -14,7 +14,7 @@ An interactive web-based visualization tool for CART decision trees built with R
 - Variable importance chart
 - Model performance panel with confusion matrix and classification statistics (accuracy, kappa, sensitivity, specificity, PPV/NPV, balanced accuracy); hover any metric label for a plain-English definition
 - Failure Definition overlay — per-dataset description of what "Failure" means in context, shown on the tree canvas
-- Semantic class colours — `Success` and `Failure` labels mapped to green/red CSS variables throughout
+- Semantic class colours — `Success` and `Failure` labels mapped to distinct CSS variables for tree nodes and confusion matrix (see [Class colours](#class-colours))
 - Support for both classification (Gini) and regression (MSE) trees
 - Dataset selector for comparing multiple models
 
@@ -186,14 +186,18 @@ ArborView/
 
 ### Class colours
 
-The colours used for `Success` and `Failure` class labels are driven by two CSS custom properties at the top of `src/styles.css`:
+Four CSS custom properties at the top of `src/styles.css` are the single source of truth for all colour in the app. They are split into two independent systems that encode different things:
 
-```css
---success: #2f855a;
---failure: #b03a2e;
-```
+| Variable | Default | Encodes | Used in |
+|---|---|---|---|
+| `--node-success` | `#1d6fa4` | "Success" class label (domain meaning) | Tree nodes, probability bars |
+| `--node-failure` | `#b45309` | "Failure" class label (domain meaning) | Tree nodes, probability bars |
+| `--cm-correct` | `#2f855a` | Correct prediction (model accuracy) | Confusion matrix diagonal cells |
+| `--cm-error` | `#b03a2e` | Incorrect prediction (model accuracy) | Confusion matrix off-diagonal cells |
 
-Changing these values updates every place the colours appear — tree nodes, the class probability bars in the node detail panel, and the confusion matrix highlights — in one edit. The mapping from class name to CSS variable lives in `src/utils.ts` (`semanticColors()`); add entries there to assign semantic colours to other class names.
+**Why two systems?** A leaf node contains a mix of correctly and incorrectly classified observations, so its colour cannot encode model accuracy. Node colour encodes the *dominant class label* (what the model predicts), while confusion matrix colour encodes *whether the model was right*. Using different palettes (blue/amber vs. green/red) makes this distinction visible at a glance.
+
+The mapping from class name to CSS variable lives in `src/utils.ts` (`semanticColors()`). Add entries there to assign node colours to additional class names.
 
 ## JSON Schema
 

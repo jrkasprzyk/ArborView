@@ -10,8 +10,8 @@ function semanticColors(): Record<string, string> {
   if (!_semanticCache) {
     const s = getComputedStyle(document.documentElement);
     _semanticCache = {
-      Success: s.getPropertyValue("--success").trim(),
-      Failure: s.getPropertyValue("--failure").trim(),
+      Success: s.getPropertyValue("--node-success").trim(),
+      Failure: s.getPropertyValue("--node-failure").trim(),
     };
   }
   return _semanticCache;

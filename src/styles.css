@@ -7,8 +7,10 @@
   --accent: #c65d21;
   --accent-soft: #f2d9c8;
   --link-path: #c65d21;
-  --success: #2f855a;
-  --failure: #b03a2e;
+  --node-success: #1d6fa4;
+  --node-failure: #b45309;
+  --cm-correct: #2f855a;
+  --cm-error: #b03a2e;
   --shadow: 0 1px 2px rgba(16, 18, 23, 0.06), 0 6px 20px rgba(16, 18, 23, 0.05);
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Roboto Mono", monospace;
   --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
@@ -392,12 +394,12 @@ html, body {
 
 .confusion-matrix td.cm-correct {
   background: rgba(47, 133, 90, 0.12);
-  color: var(--success);
+  color: var(--cm-correct);
 }
 
 .confusion-matrix td.cm-error {
   background: rgba(176, 58, 46, 0.08);
-  color: var(--failure);
+  color: var(--cm-error);
 }
 
 .perf-stats {
