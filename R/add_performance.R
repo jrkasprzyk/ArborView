@@ -14,7 +14,9 @@
 suppressPackageStartupMessages(library(jsonlite))
 
 parse_num <- function(s) {
+  if (is.null(s) || length(s) == 0L) return(NA_real_)
   s <- trimws(s)
+  if (length(s) == 0L || identical(s, "")) return(NA_real_)
   if (grepl("^<", s)) return(NA_real_)
   v <- suppressWarnings(as.numeric(s))
   v
