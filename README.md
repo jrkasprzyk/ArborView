@@ -131,8 +131,7 @@ This adds a `performance` field to the JSON in place. The model performance pane
 Provide a plain-English sentence explaining what "Failure" means for this model. It appears in the overlay panel in the upper-left corner of the tree canvas.
 
 ```bash
-Rscript R/add_failure_definition.R public/data/my_model.json \
-  "A tree is classified as Failure when its end-of-water-year basal area falls below the restoration target."
+Rscript R/add_failure_definition.R public/data/my_model.json "A trace is considered a failure if Powell falls below 3500 ft at any point up to end of water year 5."
 ```
 
 To clear the definition later, pass an empty string:
@@ -140,6 +139,8 @@ To clear the definition later, pass an empty string:
 ```bash
 Rscript R/add_failure_definition.R public/data/my_model.json ""
 ```
+
+> **Note (Windows/PowerShell):** PowerShell does not treat `\` as a line-continuation character. Keep the command on a single line, or use a backtick `` ` `` to continue across lines.
 
 ### 2. Start the dev server
 
