@@ -250,7 +250,7 @@ export type Performance = {
   positive_class: string;
   confusion_matrix: ConfusionMatrix;
   accuracy: number;
-  accuracy_ci: [number, number];
+  accuracy_ci: [number | null, number | null];
   kappa: number;
   no_information_rate: number;
   sensitivity: number;

@@ -393,12 +393,12 @@ html, body {
 }
 
 .confusion-matrix td.cm-correct {
-  background: rgba(47, 133, 90, 0.12);
+  background: color-mix(in srgb, var(--cm-correct) 12%, transparent);
   color: var(--cm-correct);
 }
 
 .confusion-matrix td.cm-error {
-  background: rgba(176, 58, 46, 0.08);
+  background: color-mix(in srgb, var(--cm-error) 8%, transparent);
   color: var(--cm-error);
 }
 
@@ -414,7 +414,7 @@ html, body {
 .perf-stats dt.has-def { cursor: help; text-decoration: underline dotted; text-underline-offset: 3px; }
 .perf-stats dd { margin: 0; font-family: var(--mono); }
 
-.metric-tooltip { position: fixed; }
+.tooltip.metric-tooltip { position: fixed; }
 
 .tooltip {
   position: absolute;
