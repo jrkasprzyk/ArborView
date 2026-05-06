@@ -186,7 +186,7 @@ ArborView/
 
 ### Class colours
 
-Four CSS custom properties at the top of `src/styles.css` are the single source of truth for all colour in the app. They are split into two independent systems that encode different things:
+Four CSS custom properties at the top of `src/styles.css` are the single source of truth for semantic/class-related colours in the app: tree node classes, probability bars, and confusion-matrix correctness/error states. They are split into two independent systems that encode different things:
 
 | Variable | Default | Encodes | Used in |
 |---|---|---|---|
