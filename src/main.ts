@@ -45,9 +45,10 @@ const datasetSelect = $<HTMLSelectElement>("#dataset-select");
 const responseBadge = $<HTMLSpanElement>("#response-badge");
 const breadcrumbEl  = $<HTMLOListElement>("#breadcrumb");
 const detailEl      = $<HTMLDivElement>("#node-detail");
-const importanceEl    = $<HTMLUListElement>("#importance");
-const performanceEl   = $<HTMLDivElement>("#performance-detail");
-const metricTooltipEl = $<HTMLDivElement>("#metric-tooltip");
+const importanceEl       = $<HTMLUListElement>("#importance");
+const performanceEl      = $<HTMLDivElement>("#performance-detail");
+const metricTooltipEl    = $<HTMLDivElement>("#metric-tooltip");
+const failureDefTextEl   = $<HTMLParagraphElement>("#failure-def-text");
 
 // Tab elements
 const tabVisualizer   = $<HTMLButtonElement>("#tab-visualizer");
@@ -162,6 +163,7 @@ async function loadDataset(entry: ManifestEntry): Promise<void> {
   // Update the badge that shows "classification" or "regression".
   responseBadge.textContent = arbor.response.type;
 
+  renderFailureDefinition(arbor.failure_definition);
   renderImportance(arbor);
   renderPerformance(arbor.performance);
   resetBreadcrumb();
@@ -369,6 +371,20 @@ function showDetail(node: Hier): void {
   }
 
   detailEl.innerHTML = `<dl>${dlContent}</dl>${classBar}`;
+}
+
+// ---------------------------------------------------------------------------
+// Canvas overlay: failure definition
+// ---------------------------------------------------------------------------
+
+function renderFailureDefinition(text: string | undefined): void {
+  if (text) {
+    failureDefTextEl.textContent = text;
+    failureDefTextEl.classList.remove("muted");
+  } else {
+    failureDefTextEl.textContent = "No failure definition set.";
+    failureDefTextEl.classList.add("muted");
+  }
 }
 
 // ---------------------------------------------------------------------------

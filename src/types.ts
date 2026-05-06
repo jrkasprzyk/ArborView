@@ -217,6 +217,13 @@ export type Arbor = {
   /** Root node of the tree.  Children are nested recursively. */
   tree: TreeNode;
 
+  /**
+   * A plain-English sentence explaining what "Failure" means in this model.
+   * Displayed in the Failure Definition overlay on the tree canvas.
+   * Absent for datasets where this hasn't been set yet.
+   */
+  failure_definition?: string;
+
   /** Whole-tree performance metrics from caret::confusionMatrix(). Absent for datasets without a perf file. */
   performance?: Performance;
 };
