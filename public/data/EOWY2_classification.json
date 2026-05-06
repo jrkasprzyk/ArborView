@@ -259,5 +259,39 @@
         ]
       }
     ]
+  },
+  "performance": {
+    "positive_class": "Failure",
+    "confusion_matrix": {
+      "labels": [
+        "Failure",
+        "Success"
+      ],
+      "matrix": [
+        [
+          77,
+          7
+        ],
+        [
+          7,
+          309
+        ]
+      ]
+    },
+    "accuracy": 0.965,
+    "accuracy_ci": [
+      0.942,
+      0.9807
+    ],
+    "kappa": 0.8945,
+    "no_information_rate": 0.79,
+    "sensitivity": 0.9167,
+    "specificity": 0.9778,
+    "ppv": 0.9167,
+    "npv": 0.9778,
+    "prevalence": 0.21,
+    "detection_rate": 0.1925,
+    "detection_prevalence": 0.21,
+    "balanced_accuracy": 0.9473
   }
 }

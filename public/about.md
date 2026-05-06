@@ -10,7 +10,8 @@ ArborView is an interactive web-based visualization tool for CART (Classificatio
 4. **Pan and zoom** the tree canvas with your mouse — click-and-drag to pan, scroll to zoom.
 5. **Read the decision path** in the "Decision path" panel on the right. It shows the sequence of split rules from the root down to the selected node, ending with the node's prediction.
 6. **Review node details** in the "Node detail" panel. It shows statistics like sample count, impurity, complexity, and for classification trees, the class probability bars.
-7. **Check variable importance** at the bottom of the sidebar — the chart shows which predictors contributed most to splits in the tree, normalised so the most important variable is always the full bar width.
+7. **Check variable importance** in the sidebar — the chart shows which predictors contributed most to splits in the tree, normalised so the most important variable is always the full bar width.
+8. **Review model performance** in the "Model performance" panel at the bottom of the sidebar. When performance data is available it shows a confusion matrix (rows = predicted class, columns = reference class) and key classification statistics including accuracy, kappa, sensitivity, specificity, PPV/NPV, and balanced accuracy.
 
 ## Understanding CART Trees
 
@@ -44,6 +45,22 @@ A **regression tree** predicts a continuous numeric outcome. At each leaf node, 
 | **complexity** | Cost-complexity parameter (α) at which this split would be pruned. Smaller = more stable. |
 | **deviance** | Total impurity × n at this node (Gini × n for classification; residual sum of squares for regression). |
 | **node prob** | Fraction of the entire training set that reached this node (classification only). |
+
+## Model Performance Statistics
+
+When a performance report has been embedded in the dataset, the **Model performance** panel shows:
+
+- **Confusion matrix** — a grid of predicted vs. actual class counts. Diagonal cells (correct predictions) are highlighted green; off-diagonal cells (errors) are highlighted red.
+- **Accuracy** — overall fraction of correct predictions, with a 95% confidence interval.
+- **Kappa** — Cohen's κ, measuring agreement above what would be expected by chance. Values near 1 indicate strong agreement; values near 0 indicate chance-level performance.
+- **Sensitivity** — true positive rate for the designated positive class (how often actual positives are correctly identified).
+- **Specificity** — true negative rate (how often actual negatives are correctly rejected).
+- **PPV** — positive predictive value (precision): of all predictions of the positive class, how many were correct.
+- **NPV** — negative predictive value: of all predictions of the negative class, how many were correct.
+- **Balanced accuracy** — the average of sensitivity and specificity. Useful when class prevalence is unequal, since it does not reward always predicting the majority class.
+- **Positive class** — which class was designated as "positive" when the statistics were computed.
+
+Performance data is added to a dataset's JSON file by running `R/add_performance.R` with a `caret::confusionMatrix()` text output file. Datasets without a performance file show a placeholder in this panel.
 
 ## Predictor Variables
 
