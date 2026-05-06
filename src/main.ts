@@ -16,7 +16,7 @@
 import * as d3 from "d3";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
-import type { Arbor, Manifest, ManifestEntry, TreeNode } from "./types";
+import type { Arbor, Manifest, ManifestEntry, Performance, TreeNode } from "./types";
 import { renderTree } from "./tree";
 import { positionTooltip, renderTooltip, splitLabel } from "./tooltip";
 import { escapeHtml, formatNum } from "./utils";
@@ -45,7 +45,8 @@ const datasetSelect = $<HTMLSelectElement>("#dataset-select");
 const responseBadge = $<HTMLSpanElement>("#response-badge");
 const breadcrumbEl  = $<HTMLOListElement>("#breadcrumb");
 const detailEl      = $<HTMLDivElement>("#node-detail");
-const importanceEl  = $<HTMLUListElement>("#importance");
+const importanceEl   = $<HTMLUListElement>("#importance");
+const performanceEl  = $<HTMLDivElement>("#performance-detail");
 
 // Tab elements
 const tabVisualizer   = $<HTMLButtonElement>("#tab-visualizer");
@@ -161,6 +162,7 @@ async function loadDataset(entry: ManifestEntry): Promise<void> {
   responseBadge.textContent = arbor.response.type;
 
   renderImportance(arbor);
+  renderPerformance(arbor.performance);
   resetBreadcrumb();
   resetDetail();
 
@@ -366,6 +368,58 @@ function showDetail(node: Hier): void {
   }
 
   detailEl.innerHTML = `<dl>${dlContent}</dl>${classBar}`;
+}
+
+// ---------------------------------------------------------------------------
+// Sidebar: model performance panel
+// ---------------------------------------------------------------------------
+
+function renderPerformance(perf: Performance | undefined): void {
+  if (!perf) {
+    performanceEl.innerHTML = `<p class="muted">No performance data for this dataset.</p>`;
+    return;
+  }
+
+  const labels = perf.confusion_matrix.labels;
+
+  // Confusion matrix table (rows = predicted, cols = reference)
+  const headerCells = labels.map((l) => `<th>${escapeHtml(l)}</th>`).join("");
+  const matRows = perf.confusion_matrix.matrix
+    .map((row, i) => {
+      const cells = row
+        .map((v, j) => `<td class="${i === j ? "cm-correct" : "cm-error"}">${v}</td>`)
+        .join("");
+      return `<tr><th>${escapeHtml(labels[i])}</th>${cells}</tr>`;
+    })
+    .join("");
+
+  const cmHtml = `
+    <div class="cm-wrap">
+      <div class="cm-ref-label">Reference</div>
+      <table class="confusion-matrix">
+        <thead><tr><th class="cm-corner">Pred \\ Ref</th>${headerCells}</tr></thead>
+        <tbody>${matRows}</tbody>
+      </table>
+    </div>`;
+
+  const ci = perf.accuracy_ci;
+  const ciStr = `(${(ci[0] * 100).toFixed(1)}–${(ci[1] * 100).toFixed(1)}%)`;
+  const statsRows: [string, string][] = [
+    ["accuracy",      `${(perf.accuracy * 100).toFixed(1)}% ${ciStr}`],
+    ["kappa",         formatNum(perf.kappa, 4)],
+    ["sensitivity",   formatNum(perf.sensitivity, 4)],
+    ["specificity",   formatNum(perf.specificity, 4)],
+    ["PPV",           formatNum(perf.ppv, 4)],
+    ["NPV",           formatNum(perf.npv, 4)],
+    ["bal. accuracy", formatNum(perf.balanced_accuracy, 4)],
+    ["positive class", escapeHtml(perf.positive_class)],
+  ];
+
+  const dlContent = statsRows
+    .map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`)
+    .join("");
+
+  performanceEl.innerHTML = `${cmHtml}<dl class="perf-stats">${dlContent}</dl>`;
 }
 
 // ---------------------------------------------------------------------------
