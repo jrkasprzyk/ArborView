@@ -409,7 +409,10 @@ html, body {
 }
 
 .perf-stats dt { color: var(--muted); }
+.perf-stats dt.has-def { cursor: help; text-decoration: underline dotted; text-underline-offset: 3px; }
 .perf-stats dd { margin: 0; font-family: var(--mono); }
+
+.metric-tooltip { position: fixed; }
 
 .tooltip {
   position: absolute;

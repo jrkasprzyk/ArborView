@@ -45,8 +45,9 @@ const datasetSelect = $<HTMLSelectElement>("#dataset-select");
 const responseBadge = $<HTMLSpanElement>("#response-badge");
 const breadcrumbEl  = $<HTMLOListElement>("#breadcrumb");
 const detailEl      = $<HTMLDivElement>("#node-detail");
-const importanceEl   = $<HTMLUListElement>("#importance");
-const performanceEl  = $<HTMLDivElement>("#performance-detail");
+const importanceEl    = $<HTMLUListElement>("#importance");
+const performanceEl   = $<HTMLDivElement>("#performance-detail");
+const metricTooltipEl = $<HTMLDivElement>("#metric-tooltip");
 
 // Tab elements
 const tabVisualizer   = $<HTMLButtonElement>("#tab-visualizer");
@@ -374,6 +375,23 @@ function showDetail(node: Hier): void {
 // Sidebar: model performance panel
 // ---------------------------------------------------------------------------
 
+const METRIC_DEFS: Readonly<Record<string, string>> = {
+  "accuracy":
+    "Proportion of all samples classified correctly. Can be misleading when class sizes are unequal.",
+  "kappa":
+    "Cohen's κ: agreement corrected for chance. 0 = no better than random, 1 = perfect, negative = worse than random.",
+  "sensitivity":
+    "Of all true positives, the fraction the model correctly identified. Also called recall or true positive rate.",
+  "specificity":
+    "Of all true negatives, the fraction the model correctly identified. Also called true negative rate.",
+  "PPV":
+    "Positive Predictive Value: of all samples predicted positive, the fraction that are truly positive. Also called precision.",
+  "NPV":
+    "Negative Predictive Value: of all samples predicted negative, the fraction that are truly negative.",
+  "bal. accuracy":
+    "Mean of sensitivity and specificity. More informative than accuracy when class sizes are unequal.",
+};
+
 function renderPerformance(perf: Performance | undefined): void {
   if (!perf) {
     performanceEl.innerHTML = `<p class="muted">No performance data for this dataset.</p>`;
@@ -416,11 +434,50 @@ function renderPerformance(perf: Performance | undefined): void {
   ];
 
   const dlContent = statsRows
-    .map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`)
+    .map(([k, v]) => {
+      const hasDef = Object.prototype.hasOwnProperty.call(METRIC_DEFS, k);
+      const dtAttrs = hasDef ? ` class="has-def" data-metric="${escapeHtml(k)}"` : "";
+      return `<dt${dtAttrs}>${k}</dt><dd>${v}</dd>`;
+    })
     .join("");
 
   performanceEl.innerHTML = `${cmHtml}<dl class="perf-stats">${dlContent}</dl>`;
 }
+
+function setupMetricTooltips(): void {
+  const tip = metricTooltipEl;
+
+  performanceEl.addEventListener("mouseover", (e) => {
+    const dt = (e.target as Element).closest<HTMLElement>("dt[data-metric]");
+    if (!dt) return;
+    const key = dt.dataset["metric"]!;
+    const def = METRIC_DEFS[key];
+    if (!def) return;
+    tip.innerHTML = `<strong>${escapeHtml(key)}</strong><div style="margin-top:4px">${escapeHtml(def)}</div>`;
+    tip.style.visibility = "hidden";
+    tip.style.left = "0";
+    tip.style.top = "0";
+    tip.hidden = false;
+    const ttRect = tip.getBoundingClientRect();
+    const dtRect = dt.getBoundingClientRect();
+    tip.style.visibility = "";
+    let left = dtRect.left;
+    let top = dtRect.top - ttRect.height - 6;
+    if (top < 8) top = dtRect.bottom + 6;
+    if (left + ttRect.width > window.innerWidth - 8) left = window.innerWidth - ttRect.width - 8;
+    if (left < 8) left = 8;
+    tip.style.left = `${left}px`;
+    tip.style.top = `${top}px`;
+  });
+
+  performanceEl.addEventListener("mouseout", (e) => {
+    const related = e.relatedTarget as Element | null;
+    if (related?.closest("dt[data-metric]")) return;
+    tip.hidden = true;
+  });
+}
+
+setupMetricTooltips();
 
 // ---------------------------------------------------------------------------
 // Sidebar: variable importance chart
