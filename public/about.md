@@ -5,13 +5,14 @@ ArborView is an interactive web-based visualization tool for CART (Classificatio
 ## How to Use This Tool
 
 1. **Select a dataset** from the dropdown in the header. Each dataset corresponds to one exported rpart model.
-2. **Explore the tree** by hovering over nodes to see summary statistics in a tooltip and in the sidebar panels.
-3. **Click a node** to pin its information in the sidebar — the decision path (breadcrumb) and node detail panel will stay focused on that node even as you continue to hover elsewhere.
-4. **Pan and zoom** the tree canvas with your mouse — click-and-drag to pan, scroll to zoom.
-5. **Read the decision path** in the "Decision path" panel on the right. It shows the sequence of split rules from the root down to the selected node, ending with the node's prediction.
-6. **Review node details** in the "Node detail" panel. It shows statistics like sample count, impurity, complexity, and for classification trees, the class probability bars.
-7. **Check variable importance** in the sidebar — the chart shows which predictors contributed most to splits in the tree, normalised so the most important variable is always the full bar width.
-8. **Review model performance** in the "Model performance" panel at the bottom of the sidebar. When performance data is available it shows a confusion matrix (rows = predicted class, columns = reference class) and key classification statistics including accuracy, kappa, sensitivity, specificity, PPV/NPV, and balanced accuracy.
+2. **Read the Failure Definition** in the overlay panel at the upper-left corner of the tree canvas. It provides plain-English context for what "Failure" means in this model — use it to ground your interpretation of node colors and predictions before exploring the tree.
+3. **Explore the tree** by hovering over nodes to see summary statistics in a tooltip and in the sidebar panels.
+4. **Click a node** to pin its information in the sidebar — the decision path (breadcrumb) and node detail panel will stay focused on that node even as you continue to hover elsewhere.
+5. **Pan and zoom** the tree canvas with your mouse — click-and-drag to pan, scroll to zoom.
+6. **Read the decision path** in the "Decision path" panel on the right. It shows the sequence of split rules from the root down to the selected node, ending with the node's prediction.
+7. **Review node details** in the "Node detail" panel. It shows statistics like sample count, impurity, complexity, and for classification trees, the class probability bars.
+8. **Check variable importance** in the sidebar — the chart shows which predictors contributed most to splits in the tree, normalised so the most important variable is always the full bar width.
+9. **Review model performance** in the "Model performance" panel at the bottom of the sidebar. When performance data is available it shows a confusion matrix (rows = predicted class, columns = reference class) and key classification statistics including accuracy, kappa, sensitivity, specificity, PPV/NPV, and balanced accuracy. Hover any metric label for a plain-English definition.
 
 ## Understanding CART Trees
 

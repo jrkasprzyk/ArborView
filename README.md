@@ -12,7 +12,9 @@ An interactive web-based visualization tool for CART decision trees built with R
 - Decision path breadcrumb — rules from root to any selected node
 - Detail panel showing impurity, complexity, deviance, and class probabilities
 - Variable importance chart
-- Model performance panel with confusion matrix and classification statistics (accuracy, kappa, sensitivity, specificity, PPV/NPV, balanced accuracy)
+- Model performance panel with confusion matrix and classification statistics (accuracy, kappa, sensitivity, specificity, PPV/NPV, balanced accuracy); hover any metric label for a plain-English definition
+- Failure Definition overlay — per-dataset description of what "Failure" means in context, shown on the tree canvas
+- Semantic class colours — `Success` and `Failure` labels mapped to green/red CSS variables throughout
 - Support for both classification (Gini) and regression (MSE) trees
 - Dataset selector for comparing multiple models
 
@@ -124,6 +126,21 @@ Rscript R/add_performance.R path/to/performance.txt public/data/my_model.json
 
 This adds a `performance` field to the JSON in place. The model performance panel in the sidebar will then show the confusion matrix and classification statistics. Datasets without a performance file simply show a placeholder message.
 
+### 1c. Add a failure definition (optional)
+
+Provide a plain-English sentence explaining what "Failure" means for this model. It appears in the overlay panel in the upper-left corner of the tree canvas.
+
+```bash
+Rscript R/add_failure_definition.R public/data/my_model.json \
+  "A tree is classified as Failure when its end-of-water-year basal area falls below the restoration target."
+```
+
+To clear the definition later, pass an empty string:
+
+```bash
+Rscript R/add_failure_definition.R public/data/my_model.json ""
+```
+
 ### 2. Start the dev server
 
 ```bash
@@ -152,8 +169,9 @@ ArborView/
 │   ├── types.ts         # TypeScript type definitions
 │   └── styles.css       # Styles
 ├── R/
-│   ├── export_tree.R       # rpart → JSON exporter
-│   └── add_performance.R   # patches caret confusionMatrix output into exported JSON
+│   ├── export_tree.R            # rpart → JSON exporter
+│   ├── add_performance.R        # patches caret confusionMatrix output into exported JSON
+│   └── add_failure_definition.R # sets/clears the failure_definition field in exported JSON
 ├── public/
 │   └── data/            # JSON tree files and manifest
 ├── docs/
@@ -195,6 +213,7 @@ Changing these values updates every place the colours appear — tree nodes, the
 | `call` | string | The original R call that produced the model, e.g. `"rpart(y ~ x1 + x2)"`. |
 | `tree` | object | Root node of the tree. Children are nested recursively (see below). |
 | `performance` | object or absent | Whole-tree classification statistics from `caret::confusionMatrix()`, added by `R/add_performance.R`. See below. |
+| `failure_definition` | string or absent | Plain-English sentence describing what "Failure" means in this model, shown in the canvas overlay. Added by `R/add_failure_definition.R`. |
 
 ### Node fields
 
