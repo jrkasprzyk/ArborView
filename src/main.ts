@@ -16,10 +16,10 @@
 import * as d3 from "d3";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
-import type { Arbor, Manifest, ManifestEntry, TreeNode } from "./types";
+import type { Arbor, Manifest, ManifestEntry, Performance, TreeNode } from "./types";
 import { renderTree } from "./tree";
 import { positionTooltip, renderTooltip, splitLabel } from "./tooltip";
-import { escapeHtml, formatNum } from "./utils";
+import { escapeHtml, formatNum, semanticColor } from "./utils";
 
 // D3 adds x/y coordinates to each TreeNode when it lays out the tree.
 // "Hier" is shorthand for that augmented type.
@@ -45,8 +45,11 @@ const datasetSelect = $<HTMLSelectElement>("#dataset-select");
 const responseBadge = $<HTMLSpanElement>("#response-badge");
 const breadcrumbEl  = $<HTMLOListElement>("#breadcrumb");
 const detailEl      = $<HTMLDivElement>("#node-detail");
-const importanceEl  = $<HTMLUListElement>("#importance");
-const resizeHandleEl = $<HTMLDivElement>("#resize-handle");
+const importanceEl      = $<HTMLUListElement>("#importance");
+const performanceEl     = $<HTMLDivElement>("#performance-detail");
+const metricTooltipEl   = $<HTMLDivElement>("#metric-tooltip");
+const failureDefTextEl  = $<HTMLParagraphElement>("#failure-def-text");
+const resizeHandleEl    = $<HTMLDivElement>("#resize-handle");
 
 // Tab elements
 const tabVisualizer   = $<HTMLButtonElement>("#tab-visualizer");
@@ -214,7 +217,9 @@ async function loadDataset(entry: ManifestEntry): Promise<void> {
   // Update the badge that shows "classification" or "regression".
   responseBadge.textContent = arbor.response.type;
 
+  renderFailureDefinition(arbor.failure_definition);
   renderImportance(arbor);
+  renderPerformance(arbor.performance);
   resetBreadcrumb();
   resetDetail();
 
@@ -403,8 +408,8 @@ function showDetail(node: Hier): void {
     currentArbor.response.levels
   ) {
     const levels = currentArbor.response.levels;
-    // Use the same Tableau 10 colour palette as the tree nodes so colours match.
-    const color = d3.scaleOrdinal<string, string>().domain(levels).range(d3.schemeTableau10);
+    // Use the same colour palette as the tree nodes so colours match.
+    const color = d3.scaleOrdinal<string, string>().domain(levels).range(levels.map((lvl, i) => semanticColor(lvl) ?? d3.schemeTableau10[i % 10]));
     const rowsHtml = levels
       .map((lvl, i) => {
         const p = d.class_probs![i] ?? 0;
@@ -421,6 +426,130 @@ function showDetail(node: Hier): void {
 
   detailEl.innerHTML = `<dl>${dlContent}</dl>${classBar}`;
 }
+
+// ---------------------------------------------------------------------------
+// Canvas overlay: failure definition
+// ---------------------------------------------------------------------------
+
+function renderFailureDefinition(text: string | undefined): void {
+  if (text) {
+    failureDefTextEl.textContent = text;
+    failureDefTextEl.classList.remove("muted");
+  } else {
+    failureDefTextEl.textContent = "No failure definition set.";
+    failureDefTextEl.classList.add("muted");
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Sidebar: model performance panel
+// ---------------------------------------------------------------------------
+
+const METRIC_DEFS: Readonly<Record<string, string>> = {
+  "accuracy":
+    "Proportion of all samples classified correctly. Can be misleading when class sizes are unequal.",
+  "kappa":
+    "Cohen's κ: agreement corrected for chance. 0 = no better than random, 1 = perfect, negative = worse than random.",
+  "sensitivity":
+    "Of all true positives, the fraction the model correctly identified. Also called recall or true positive rate.",
+  "specificity":
+    "Of all true negatives, the fraction the model correctly identified. Also called true negative rate.",
+  "PPV":
+    "Positive Predictive Value: of all samples predicted positive, the fraction that are truly positive. Also called precision.",
+  "NPV":
+    "Negative Predictive Value: of all samples predicted negative, the fraction that are truly negative.",
+  "bal. accuracy":
+    "Mean of sensitivity and specificity. More informative than accuracy when class sizes are unequal.",
+};
+
+function renderPerformance(perf: Performance | undefined): void {
+  if (!perf) {
+    performanceEl.innerHTML = `<p class="muted">No performance data for this dataset.</p>`;
+    return;
+  }
+
+  const labels = perf.confusion_matrix.labels;
+
+  // Confusion matrix table (rows = predicted, cols = reference)
+  const headerCells = labels.map((l) => `<th>${escapeHtml(l)}</th>`).join("");
+  const matRows = perf.confusion_matrix.matrix
+    .map((row, i) => {
+      const cells = row
+        .map((v, j) => `<td class="${i === j ? "cm-correct" : "cm-error"}">${v}</td>`)
+        .join("");
+      return `<tr><th>${escapeHtml(labels[i])}</th>${cells}</tr>`;
+    })
+    .join("");
+
+  const cmHtml = `
+    <div class="cm-wrap">
+      <div class="cm-ref-label">Reference</div>
+      <table class="confusion-matrix">
+        <thead><tr><th class="cm-corner">Pred \\ Ref</th>${headerCells}</tr></thead>
+        <tbody>${matRows}</tbody>
+      </table>
+    </div>`;
+
+  const ci = perf.accuracy_ci;
+  const ciStr = ci[0] != null && ci[1] != null
+    ? `(${(ci[0] * 100).toFixed(1)}–${(ci[1] * 100).toFixed(1)}%)`
+    : "";
+  const statsRows: [string, string][] = [
+    ["accuracy",      `${(perf.accuracy * 100).toFixed(1)}% ${ciStr}`],
+    ["kappa",         formatNum(perf.kappa, 4)],
+    ["sensitivity",   formatNum(perf.sensitivity, 4)],
+    ["specificity",   formatNum(perf.specificity, 4)],
+    ["PPV",           formatNum(perf.ppv, 4)],
+    ["NPV",           formatNum(perf.npv, 4)],
+    ["bal. accuracy", formatNum(perf.balanced_accuracy, 4)],
+    ["positive class", escapeHtml(perf.positive_class)],
+  ];
+
+  const dlContent = statsRows
+    .map(([k, v]) => {
+      const hasDef = Object.prototype.hasOwnProperty.call(METRIC_DEFS, k);
+      const dtAttrs = hasDef ? ` class="has-def" data-metric="${escapeHtml(k)}"` : "";
+      return `<dt${dtAttrs}>${k}</dt><dd>${v}</dd>`;
+    })
+    .join("");
+
+  performanceEl.innerHTML = `${cmHtml}<dl class="perf-stats">${dlContent}</dl>`;
+}
+
+function setupMetricTooltips(): void {
+  const tip = metricTooltipEl;
+
+  performanceEl.addEventListener("mouseover", (e) => {
+    const dt = (e.target as Element).closest<HTMLElement>("dt[data-metric]");
+    if (!dt) return;
+    const key = dt.dataset["metric"]!;
+    const def = METRIC_DEFS[key];
+    if (!def) return;
+    tip.innerHTML = `<strong>${escapeHtml(key)}</strong><div style="margin-top:4px">${escapeHtml(def)}</div>`;
+    tip.style.visibility = "hidden";
+    tip.style.left = "0";
+    tip.style.top = "0";
+    tip.hidden = false;
+    const ttRect = tip.getBoundingClientRect();
+    const dtRect = dt.getBoundingClientRect();
+    tip.style.visibility = "";
+    let left = dtRect.left;
+    let top = dtRect.top - ttRect.height - 6;
+    if (top < 8) top = dtRect.bottom + 6;
+    if (left + ttRect.width > window.innerWidth - 8) left = window.innerWidth - ttRect.width - 8;
+    if (left < 8) left = 8;
+    tip.style.left = `${left}px`;
+    tip.style.top = `${top}px`;
+  });
+
+  performanceEl.addEventListener("mouseout", (e) => {
+    const related = e.relatedTarget as Element | null;
+    if (related?.closest("dt[data-metric]")) return;
+    tip.hidden = true;
+  });
+}
+
+setupMetricTooltips();
 
 // ---------------------------------------------------------------------------
 // Sidebar: variable importance chart

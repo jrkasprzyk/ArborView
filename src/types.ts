@@ -216,6 +216,51 @@ export type Arbor = {
 
   /** Root node of the tree.  Children are nested recursively. */
   tree: TreeNode;
+
+  /**
+   * A plain-English sentence explaining what "Failure" means in this model.
+   * Displayed in the Failure Definition overlay on the tree canvas.
+   * Absent for datasets where this hasn't been set yet.
+   */
+  failure_definition?: string;
+
+  /** Whole-tree performance metrics from caret::confusionMatrix(). Absent for datasets without a perf file. */
+  performance?: Performance;
+};
+
+// ---------------------------------------------------------------------------
+// Model performance (optional — present only when a performance file was patched in)
+// ---------------------------------------------------------------------------
+
+/**
+ * A confusion matrix from caret's confusionMatrix() output.
+ * Rows = predicted class, columns = reference (true) class.
+ * labels[i] corresponds to matrix[i][j].
+ */
+export type ConfusionMatrix = {
+  labels: string[];
+  matrix: number[][];
+};
+
+/**
+ * Whole-tree performance statistics produced by caret::confusionMatrix()
+ * and embedded into the JSON by R/add_performance.R.
+ */
+export type Performance = {
+  positive_class: string;
+  confusion_matrix: ConfusionMatrix;
+  accuracy: number;
+  accuracy_ci: [number | null, number | null];
+  kappa: number;
+  no_information_rate: number;
+  sensitivity: number;
+  specificity: number;
+  ppv: number;
+  npv: number;
+  prevalence: number;
+  detection_rate: number;
+  detection_prevalence: number;
+  balanced_accuracy: number;
 };
 
 // ---------------------------------------------------------------------------

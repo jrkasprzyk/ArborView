@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+### Added
+
+- **Failure Definition overlay.** A panel in the upper-left corner of the tree canvas shows a plain-English sentence describing what "Failure" means for the loaded model. Provides grounding context before exploring the tree. Set via the new `R/add_failure_definition.R` CLI; clears with an empty string argument. Stored as `failure_definition` in the JSON.
+
+- **`R/add_failure_definition.R`.** CLI script to patch or clear the `failure_definition` field in an exported JSON file without re-exporting the model.
+
+- **Model performance panel.** The sidebar now shows a whole-tree confusion matrix and classification statistics (accuracy with 95% CI, kappa, sensitivity, specificity, PPV, NPV, balanced accuracy, positive class) when performance data is present. Added by `R/add_performance.R`.
+
+- **`R/add_performance.R`.** CLI script to parse a `caret::confusionMatrix()` text output file and patch a `performance` field into an existing JSON.
+
+- **Metric tooltips.** Hovering a metric label in the Model performance panel shows a plain-English definition of that statistic.
+
+- **Semantic class colours.** `Success` and `Failure` class labels are mapped to node-related CSS custom properties (`--node-success: #2f855a`, `--node-failure: #b03a2e`) for tree nodes and class probability bars. Confusion-matrix correctness highlighting uses a separate palette (`--cm-correct`, `--cm-error`). Add entries to `semanticColors()` in `src/utils.ts` to assign colours to additional class names.
+
 ### Changed
 
 - **Node labels are now two lines for leaf nodes.** The predicted class/value appears on the first line and the sample count `(n=...)` on the second. This cuts the horizontal label footprint roughly in half for leaf nodes, reducing overlap on wide trees.

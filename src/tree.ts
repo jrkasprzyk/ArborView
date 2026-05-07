@@ -24,6 +24,7 @@
 import * as d3 from "d3";
 import type { Arbor, TreeNode } from "./types";
 import { splitLabel } from "./tooltip";
+import { semanticColor } from "./utils";
 
 // D3 adds x/y layout coordinates to each TreeNode.  "Hier" is short for this.
 type Hier = d3.HierarchyPointNode<TreeNode>;
@@ -120,7 +121,7 @@ export function renderTree(svg: SVGSVGElement, arbor: Arbor, events: TreeEvents)
   const classColor = d3
     .scaleOrdinal<string, string>()
     .domain(levels)
-    .range(d3.schemeTableau10);
+    .range(levels.map((lvl, i) => semanticColor(lvl) ?? d3.schemeTableau10[i % 10]));
 
   // Regression: predicted value mapped to Viridis (dark-purple → yellow).
   // d3.extent() returns [min, max]; casting is safe because every node has a

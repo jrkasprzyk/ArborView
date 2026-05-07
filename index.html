@@ -29,6 +29,10 @@
     <div id="panel-visualizer" role="tabpanel" aria-labelledby="tab-visualizer">
       <main class="layout">
         <section class="canvas">
+          <div id="failure-def-panel" class="failure-def-panel">
+            <div class="failure-def-title">Failure Definition</div>
+            <p id="failure-def-text" class="failure-def-text muted">No failure definition set.</p>
+          </div>
           <svg id="tree" role="img" aria-label="CART tree"></svg>
           <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
         </section>
@@ -46,6 +50,10 @@
             <h2>Variable importance</h2>
             <ul id="importance" class="importance"></ul>
           </section>
+          <section class="panel">
+            <h2>Model performance</h2>
+            <div id="performance-detail"><p class="muted">No performance data for this dataset.</p></div>
+          </section>
         </aside>
       </main>
     </div>
@@ -56,6 +64,7 @@
       </div>
     </div>
 
+    <div id="metric-tooltip" class="tooltip metric-tooltip" role="tooltip" hidden></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -4,15 +4,31 @@
   "method": "class",
   "response": {
     "type": "classification",
-    "levels": ["Failure", "Success"]
+    "levels": [
+      "Failure",
+      "Success"
+    ]
   },
   "variables": {
     "predictors": [
-      "N_month_tot", "wy1_tot", "wy2_tot", "wy3_tot", "wy4_tot", "wy5_tot",
-      "cumulative_EndOf_WY1", "cumulative_EndOf_WY2", "cumulative_EndOf_WY3",
-      "cumulative_EndOf_WY4", "cumulative_EndOf_WY5",
-      "min_WY_flow", "min_AMJJ_flow", "monthly_avg", "full_WYs_avg",
-      "wy_minus2_tot", "wy_minus1_tot", "pre_mdl_cumulative"
+      "N_month_tot",
+      "wy1_tot",
+      "wy2_tot",
+      "wy3_tot",
+      "wy4_tot",
+      "wy5_tot",
+      "cumulative_EndOf_WY1",
+      "cumulative_EndOf_WY2",
+      "cumulative_EndOf_WY3",
+      "cumulative_EndOf_WY4",
+      "cumulative_EndOf_WY5",
+      "min_WY_flow",
+      "min_AMJJ_flow",
+      "monthly_avg",
+      "full_WYs_avg",
+      "wy_minus2_tot",
+      "wy_minus1_tot",
+      "pre_mdl_cumulative"
     ],
     "importance": {
       "wy1_tot": 22.5
@@ -28,12 +44,23 @@
     "complexity": 0.95,
     "is_leaf": false,
     "predicted_class": "Success",
-    "class_counts": [23, 377],
-    "class_probs": [0.0575, 0.9425],
+    "class_counts": [
+      23,
+      377
+    ],
+    "class_probs": [
+      0.0575,
+      0.9425
+    ],
     "node_prob": 1,
     "impurity": 0.108388,
     "split_var": "wy1_tot",
-    "split": {"type": "numeric", "threshold": 4.268, "left_op": "<", "right_op": ">="},
+    "split": {
+      "type": "numeric",
+      "threshold": 4.268,
+      "left_op": "<",
+      "right_op": ">="
+    },
     "rule_from_root": [],
     "children": [
       {
@@ -45,11 +72,19 @@
         "complexity": 0.01,
         "is_leaf": true,
         "predicted_class": "Failure",
-        "class_counts": [23, 0],
-        "class_probs": [1.0, 0.0],
+        "class_counts": [
+          23,
+          0
+        ],
+        "class_probs": [
+          1,
+          0
+        ],
         "node_prob": 0.0575,
-        "impurity": 0.0,
-        "rule_from_root": ["wy1_tot < 4.268"]
+        "impurity": 0,
+        "rule_from_root": [
+          "wy1_tot < 4.268"
+        ]
       },
       {
         "node_id": 3,
@@ -60,12 +95,55 @@
         "complexity": 0.01,
         "is_leaf": true,
         "predicted_class": "Success",
-        "class_counts": [0, 377],
-        "class_probs": [0.0, 1.0],
+        "class_counts": [
+          0,
+          377
+        ],
+        "class_probs": [
+          0,
+          1
+        ],
         "node_prob": 0.9425,
-        "impurity": 0.0,
-        "rule_from_root": ["wy1_tot >= 4.268"]
+        "impurity": 0,
+        "rule_from_root": [
+          "wy1_tot >= 4.268"
+        ]
       }
     ]
-  }
+  },
+  "performance": {
+    "positive_class": "Failure",
+    "confusion_matrix": {
+      "labels": [
+        "Failure",
+        "Success"
+      ],
+      "matrix": [
+        [
+          19,
+          4
+        ],
+        [
+          0,
+          377
+        ]
+      ]
+    },
+    "accuracy": 0.99,
+    "accuracy_ci": [
+      0.9746,
+      0.9973
+    ],
+    "kappa": 0.8995,
+    "no_information_rate": 0.9525,
+    "sensitivity": 1,
+    "specificity": 0.9895,
+    "ppv": 0.8261,
+    "npv": 1,
+    "prevalence": 0.0475,
+    "detection_rate": 0.0475,
+    "detection_prevalence": 0.0575,
+    "balanced_accuracy": 0.9948
+  },
+  "failure_definition": "Powell pool elevation falls below 3500' at least once before EOWY1"
 }
