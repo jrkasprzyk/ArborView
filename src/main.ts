@@ -14,6 +14,8 @@
  */
 
 import * as d3 from "d3";
+import { marked } from "marked";
+import DOMPurify from "dompurify";
 import type { Arbor, Manifest, ManifestEntry, TreeNode } from "./types";
 import { renderTree } from "./tree";
 import { positionTooltip, renderTooltip, splitLabel } from "./tooltip";
@@ -45,6 +47,13 @@ const breadcrumbEl  = $<HTMLOListElement>("#breadcrumb");
 const detailEl      = $<HTMLDivElement>("#node-detail");
 const importanceEl  = $<HTMLUListElement>("#importance");
 const resizeHandleEl = $<HTMLDivElement>("#resize-handle");
+
+// Tab elements
+const tabVisualizer   = $<HTMLButtonElement>("#tab-visualizer");
+const tabAbout        = $<HTMLButtonElement>("#tab-about");
+const panelVisualizer = $<HTMLDivElement>("#panel-visualizer");
+const panelAbout      = $<HTMLDivElement>("#panel-about");
+const aboutContent    = $<HTMLElement>("#about-content");
 
 // ---------------------------------------------------------------------------
 // Application state
@@ -126,6 +135,39 @@ bootstrap().catch((err) => {
      </div>`,
   );
 });
+
+// ---------------------------------------------------------------------------
+// Tab navigation
+// ---------------------------------------------------------------------------
+
+function activateTab(tab: "visualizer" | "about"): void {
+  const isVisualizer = tab === "visualizer";
+  tabVisualizer.classList.toggle("active", isVisualizer);
+  tabAbout.classList.toggle("active", !isVisualizer);
+  tabVisualizer.setAttribute("aria-selected", String(isVisualizer));
+  tabAbout.setAttribute("aria-selected", String(!isVisualizer));
+  panelVisualizer.hidden = !isVisualizer;
+  panelAbout.hidden = isVisualizer;
+}
+
+tabVisualizer.addEventListener("click", () => activateTab("visualizer"));
+tabAbout.addEventListener("click", () => activateTab("about"));
+
+// Load the About markdown once at startup.
+loadAbout().catch((err) => {
+  console.error("[ArborView] Failed to load about.md:", err);
+  aboutContent.innerHTML = `<p class="muted">Could not load about.md: ${escapeHtml(String(err))}</p>`;
+});
+
+async function loadAbout(): Promise<void> {
+  const response = await fetch("/about.md");
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status} fetching "/about.md": ${response.statusText}`);
+  }
+  const text = await response.text();
+  // Sanitize the HTML output from marked to prevent XSS before injecting into the DOM.
+  aboutContent.innerHTML = DOMPurify.sanitize(await marked.parse(text));
+}
 
 async function bootstrap(): Promise<void> {
   // Step 1: fetch the manifest (a small JSON file listing all available datasets).
