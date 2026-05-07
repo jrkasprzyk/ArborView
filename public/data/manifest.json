@@ -2,22 +2,17 @@
   "datasets": [
     {
       "id": "eowy1",
-      "label": "SE Oct2025 CART — EOWY1 (shallow classification)",
+      "label": "Powell < 3500' by end of WY 1",
       "file": "EOWY1_classification.json"
     },
 	{
       "id": "eowy2",
-      "label": "SE Oct2025 CART — EOWY2 (classification)",
+      "label": "Powell < 3500' by end of WY 2",
       "file": "EOWY2_classification.json"
-    },
-		{
-      "id": "eowy3",
-      "label": "SE Oct2025 CART — EOWY3 (classification)",
-      "file": "EOWY3_classification.json"
     },
 	{
       "id": "eowy5",
-      "label": "SE Oct2025 CART — EOWY5 (classification)",
+      "label": "Powell < 3500' by end of WY 5",
       "file": "EOWY5_classification.json"
     },
     {
