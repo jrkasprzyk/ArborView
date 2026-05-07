@@ -195,7 +195,7 @@ Four CSS custom properties at the top of `src/styles.css` are the single source 
 | `--cm-correct` | `#2f855a` | Correct prediction (model accuracy) | Confusion matrix diagonal cells |
 | `--cm-error` | `#b03a2e` | Incorrect prediction (model accuracy) | Confusion matrix off-diagonal cells |
 
-**Why two systems?** A leaf node contains a mix of correctly and incorrectly classified observations, so its colour cannot encode model accuracy. Node colour encodes the *dominant class label* (what the model predicts), while confusion matrix colour encodes *whether the model was right*. Using different palettes (blue/amber vs. green/red) makes this distinction visible at a glance.
+**Why two color systems?** Any leaf node can contain a mix of correctly and incorrectly classified observations, meaning that the same color system cannot represent both modeled classification and model accuracy. The node coloring represents the dominant class label in the node (model predictions), and the confusion matrix color represents whether or not the model predictions were correct."
 
 The mapping from class name to CSS variable lives in `src/utils.ts` (`semanticColors()`). Add entries there to assign node colours to additional class names.
 
