@@ -174,6 +174,7 @@ ArborView/
 │   ├── add_performance.R        # patches caret confusionMatrix output into exported JSON
 │   └── add_failure_definition.R # sets/clears the failure_definition field in exported JSON
 ├── public/
+│   ├── about.md         # About tab content (replace with your own Markdown)
 │   └── data/            # JSON tree files and manifest
 ├── docs/
 │   ├── typescript-for-r-users.md      # TypeScript primer for R contributors

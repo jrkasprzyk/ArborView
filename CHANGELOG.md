@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## May 2026
 
 ### Added
 
@@ -14,7 +14,7 @@
 
 - **Metric tooltips.** Hovering a metric label in the Model performance panel shows a plain-English definition of that statistic.
 
-- **Semantic class colours.** `Success` and `Failure` class labels are mapped to node-related CSS custom properties (`--node-success: #2f855a`, `--node-failure: #b03a2e`) for tree nodes and class probability bars. Confusion-matrix correctness highlighting uses a separate palette (`--cm-correct`, `--cm-error`). Add entries to `semanticColors()` in `src/utils.ts` to assign colours to additional class names.
+- **Semantic class colours.** `Success` and `Failure` class labels are mapped to node-related CSS custom properties (`--node-success: #1d6fa4`, `--node-failure: #b45309`) for tree nodes and class probability bars. Confusion-matrix correctness highlighting uses a separate palette (`--cm-correct`, `--cm-error`). Add entries to `semanticColors()` in `src/utils.ts` to assign colours to additional class names.
 
 ### Changed
 
