@@ -12,6 +12,7 @@
   --shadow: 0 1px 2px rgba(16, 18, 23, 0.06), 0 6px 20px rgba(16, 18, 23, 0.05);
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Roboto Mono", monospace;
   --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --sidebar-w: 340px;
 }
 
 * { box-sizing: border-box; }
@@ -216,8 +217,8 @@ html, body {
 
 .layout {
   display: grid;
-  grid-template-columns: 1fr 340px;
-  gap: 16px;
+  grid-template-columns: 1fr 5px var(--sidebar-w);
+  gap: 0 8px;
   padding: 16px 22px 22px;
   height: calc(100vh - 58px);
   min-height: 0;
@@ -237,6 +238,19 @@ html, body {
   cursor: grab;
 }
 .canvas svg:active { cursor: grabbing; }
+
+.resize-handle {
+  cursor: col-resize;
+  border-radius: 3px;
+  background: transparent;
+  transition: background 150ms ease;
+  touch-action: none;
+  align-self: stretch;
+}
+.resize-handle:hover,
+.resize-handle.dragging {
+  background: var(--rule);
+}
 
 .sidebar {
   display: flex;
@@ -322,16 +336,18 @@ html, body {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   font-size: 12.5px;
 }
 .importance li {
   display: grid;
-  grid-template-columns: 110px 1fr 50px;
-  gap: 8px;
-  align-items: center;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 2px 6px;
 }
 .importance .bar {
+  grid-column: 1 / -1;
+  grid-row: 2;
   height: 6px;
   border-radius: 3px;
   background: var(--accent-soft);
@@ -341,8 +357,22 @@ html, body {
   background: var(--accent);
   border-radius: 3px;
 }
-.importance .name { font-family: var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.importance .val { font-family: var(--mono); color: var(--muted); text-align: right; }
+.importance .name {
+  grid-column: 1;
+  grid-row: 1;
+  font-family: var(--mono);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.importance .val {
+  grid-column: 2;
+  grid-row: 1;
+  font-family: var(--mono);
+  color: var(--muted);
+  text-align: right;
+  white-space: nowrap;
+}
 
 .tooltip {
   position: absolute;

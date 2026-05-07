@@ -46,6 +46,7 @@ const responseBadge = $<HTMLSpanElement>("#response-badge");
 const breadcrumbEl  = $<HTMLOListElement>("#breadcrumb");
 const detailEl      = $<HTMLDivElement>("#node-detail");
 const importanceEl  = $<HTMLUListElement>("#importance");
+const resizeHandleEl = $<HTMLDivElement>("#resize-handle");
 
 // Tab elements
 const tabVisualizer   = $<HTMLButtonElement>("#tab-visualizer");
@@ -62,6 +63,59 @@ const aboutContent    = $<HTMLElement>("#about-content");
 
 let currentArbor: Arbor | null = null;
 let selected: Hier | null = null;
+
+// ---------------------------------------------------------------------------
+// Resizable sidebar
+// ---------------------------------------------------------------------------
+// The sidebar width is stored as a CSS custom property (--sidebar-w) on the
+// root element so the grid layout column definition can reference it.  The
+// drag handle lets users widen or narrow the panel to suit their screen.
+// Keep DEFAULT_SIDEBAR_W in sync with the --sidebar-w initial value in styles.css.
+
+const DEFAULT_SIDEBAR_W = 340;
+
+(function initResizeHandle(): void {
+  let dragging = false;
+  let startX = 0;
+  let startWidth = 0;
+
+  const MIN_W = 220;
+  const MAX_W = 640;
+
+  function getSidebarWidth(): number {
+    const raw = getComputedStyle(document.documentElement)
+      .getPropertyValue("--sidebar-w")
+      .trim();
+    return parseInt(raw, 10) || DEFAULT_SIDEBAR_W;
+  }
+
+  resizeHandleEl.addEventListener("mousedown", (e: MouseEvent) => {
+    dragging = true;
+    startX = e.clientX;
+    startWidth = getSidebarWidth();
+    resizeHandleEl.classList.add("dragging");
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+    e.preventDefault();
+  });
+
+  window.addEventListener("mousemove", (e: MouseEvent) => {
+    if (!dragging) return;
+    // The handle sits on the left edge of the sidebar.  Dragging it left
+    // moves that edge left, expanding the sidebar; dragging right shrinks it.
+    const delta = startX - e.clientX;
+    const newWidth = Math.max(MIN_W, Math.min(MAX_W, startWidth + delta));
+    document.documentElement.style.setProperty("--sidebar-w", `${newWidth}px`);
+  });
+
+  window.addEventListener("mouseup", () => {
+    if (!dragging) return;
+    dragging = false;
+    resizeHandleEl.classList.remove("dragging");
+    document.body.style.cursor = "";
+    document.body.style.userSelect = "";
+  });
+})();
 
 // ---------------------------------------------------------------------------
 // Startup
@@ -374,7 +428,9 @@ function showDetail(node: Hier): void {
 
 /**
  * Render a horizontal bar chart of variable importance scores.
- * Bars are normalised so the most important variable is always 100% wide.
+ * Each bar is sized relative to the top-ranked variable (always 100% wide).
+ * The displayed value is the *relative* importance — each variable's share of
+ * the total importance, expressed as a percentage.
  */
 function renderImportance(arbor: Arbor): void {
   importanceEl.innerHTML = "";
@@ -388,14 +444,16 @@ function renderImportance(arbor: Arbor): void {
   // Sort descending so the most important variable appears first.
   entries.sort((a, b) => b[1] - a[1]);
   const max = entries[0][1];
+  const total = entries.reduce((sum, [, v]) => sum + v, 0);
 
   for (const [name, val] of entries) {
     const li = document.createElement("li");
-    const pct = (val / max) * 100;
+    const barPct = (val / max) * 100;
+    const relPct = total > 0 ? (val / total) * 100 : 0;
     li.innerHTML = `
       <span class="name" title="${escapeHtml(name)}">${escapeHtml(name)}</span>
-      <div class="bar"><div class="bar-fill" style="width:${pct.toFixed(1)}%"></div></div>
-      <span class="val">${formatNum(val, 3)}</span>`;
+      <span class="val">${relPct.toFixed(1)}%</span>
+      <div class="bar"><div class="bar-fill" style="width:${barPct.toFixed(1)}%"></div></div>`;
     importanceEl.appendChild(li);
   }
 }
