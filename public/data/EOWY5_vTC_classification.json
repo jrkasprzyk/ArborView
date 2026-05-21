@@ -330,5 +330,40 @@
         ]
       }
     ]
-  }
+  },
+  "performance": {
+    "positive_class": "Failure",
+    "confusion_matrix": {
+      "labels": [
+        "Failure",
+        "Success"
+      ],
+      "matrix": [
+        [
+          125,
+          6
+        ],
+        [
+          9,
+          260
+        ]
+      ]
+    },
+    "accuracy": 0.9625,
+    "accuracy_ci": [
+      0.9389,
+      0.9789
+    ],
+    "kappa": 0.9154,
+    "no_information_rate": 0.665,
+    "sensitivity": 0.9328,
+    "specificity": 0.9774,
+    "ppv": 0.9542,
+    "npv": 0.9665,
+    "prevalence": 0.335,
+    "detection_rate": 0.3125,
+    "detection_prevalence": 0.3275,
+    "balanced_accuracy": 0.9551
+  },
+  "failure_definition": "Powell pool elevation falls below 3500' at least once before EOWY5"
 }

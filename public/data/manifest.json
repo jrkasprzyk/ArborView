@@ -15,6 +15,21 @@
       "label": "Powell < 3500' by end of WY 5",
       "file": "EOWY5_classification.json"
     },
+	{
+      "id": "eowy1_vTC",
+      "label": "Powell < 3500' by end of WY 1 (vTC)",
+      "file": "EOWY1_vTC_classification.json"
+    },
+	{
+      "id": "eowy2_vTC",
+      "label": "Powell < 3500' by end of WY 2 (vTC)",
+      "file": "EOWY2_vTC_classification.json"
+    },
+	{
+      "id": "eowy5_vTC",
+      "label": "Powell < 3500' by end of WY 5 (vTC)",
+      "file": "EOWY5_vTC_classification.json"
+    },
     {
       "id": "mtcars",
       "label": "mtcars mpg (regression)",
