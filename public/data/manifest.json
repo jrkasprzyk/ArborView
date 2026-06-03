@@ -1,33 +1,18 @@
 {
   "datasets": [
-    {
-      "id": "eowy1",
-      "label": "Powell < 3500' by end of WY 1",
-      "file": "EOWY1_classification.json"
-    },
-	{
-      "id": "eowy2",
-      "label": "Powell < 3500' by end of WY 2",
-      "file": "EOWY2_classification.json"
-    },
-	{
-      "id": "eowy5",
-      "label": "Powell < 3500' by end of WY 5",
-      "file": "EOWY5_classification.json"
-    },
 	{
       "id": "eowy1_vTC",
-      "label": "Powell < 3500' by end of WY 1 (vTC)",
+      "label": "Powell < 3500' by end of WY 1",
       "file": "EOWY1_vTC_classification.json"
     },
 	{
       "id": "eowy2_vTC",
-      "label": "Powell < 3500' by end of WY 2 (vTC)",
+      "label": "Powell < 3500' by end of WY 2",
       "file": "EOWY2_vTC_classification.json"
     },
 	{
       "id": "eowy5_vTC",
-      "label": "Powell < 3500' by end of WY 5 (vTC)",
+      "label": "Powell < 3500' by end of WY 5",
       "file": "EOWY5_vTC_classification.json"
     },
     {
