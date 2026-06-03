@@ -2,9 +2,7 @@
 
 Interactive web visualization for CART decision trees built with R's `rpart`. Export an rpart model to JSON, then explore its structure, node statistics, variable importance, and performance in the browser — rendered with D3.js.
 
-**Live demo:** https://arborview-delta.vercel.app/
-
-## What it does
+## Features
 
 - Interactive D3 tree: pan, zoom, drag nodes, hover for tooltips
 - Decision-path breadcrumb from root to any node
@@ -17,7 +15,13 @@ Interactive web visualization for CART decision trees built with R's `rpart`. Ex
 
 ## Quick start
 
-Requires **Node.js 18+** (with npm). R is only needed to export your *own* models — the repo ships with sample datasets you can explore immediately.
+### Use the web deployed version
+
+[ArborView](https://arborview-delta.vercel.app/) is hosted on Vercel.
+
+### Install locally
+
+Requires **Node.js 18+** (with npm). Example datasets are built in to the tool. To export your *own* models, you also need the [R language](https://www.r-project.org/). 
 
 ```bash
 npm install
@@ -30,7 +34,7 @@ New here? Start with the [tutorial](docs/tutorial.md).
 
 ## Documentation
 
-Documentation follows the [Diátaxis](https://diataxis.fr/) framework — four kinds, each with one job:
+Documentation follows the [Diátaxis](https://diataxis.fr/) framework:
 
 | Guide | Read it when you want to… |
 |---|---|
