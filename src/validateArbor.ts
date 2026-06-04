@@ -32,10 +32,24 @@ function validateNode(value: unknown, path: string): void {
   if (!isObject(value)) {
     throw new Error(`${path}: expected a node object`);
   }
-  if (typeof value["node_id"] !== "number") {
+  const nodeId = value["node_id"];
+  if (typeof nodeId !== "number") {
     throw new Error(`${path}: missing numeric node_id`);
   }
-  const nodeLabel = `node ${value["node_id"]}`;
+  const nodeLabel = `node ${nodeId}`;
+
+  const requiredNums = ["depth", "n", "weight", "deviance", "complexity", "impurity"] as const;
+  for (const k of requiredNums) {
+    if (typeof value[k] !== "number") {
+      throw new Error(`${nodeLabel}: missing numeric ${k}`);
+    }
+  }
+
+  const rules = value["rule_from_root"];
+  if (!Array.isArray(rules) || rules.some((r) => typeof r !== "string")) {
+    throw new Error(`${nodeLabel}: rule_from_root must be an array of strings`);
+  }
+
   if (typeof value["is_leaf"] !== "boolean") {
     throw new Error(`${nodeLabel}: missing boolean is_leaf`);
   }
