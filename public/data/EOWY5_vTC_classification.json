@@ -1,0 +1,369 @@
+{
+  "schema": "arborview/tree@1",
+  "title": "SE Oct2025 vTC CART - EOWY5",
+  "method": "class",
+  "response": {
+    "type": "classification",
+    "levels": [
+      "Failure",
+      "Success"
+    ]
+  },
+  "variables": {
+    "predictors": [
+      "N_month_tot",
+      "wy1_tot",
+      "wy2_tot",
+      "wy3_tot",
+      "wy4_tot",
+      "wy5_tot",
+      "cumulative_EndOf_WY1",
+      "cumulative_EndOf_WY2",
+      "cumulative_EndOf_WY3",
+      "cumulative_EndOf_WY4",
+      "cumulative_EndOf_WY5",
+      "min_WY_flow",
+      "min_AMJJ_flow",
+      "monthly_avg",
+      "full_WYs_avg",
+      "wy_minus2_tot",
+      "wy_minus1_tot",
+      "pre_mdl_cumulative"
+    ],
+    "importance": {
+      "cumulative_EndOf_WY3": 122.152582,
+      "cumulative_EndOf_WY4": 97.482828,
+      "cumulative_EndOf_WY2": 94.480127,
+      "cumulative_EndOf_WY5": 88.663213,
+      "monthly_avg": 88.663213,
+      "full_WYs_avg": 87.616474,
+      "cumulative_EndOf_WY1": 16.571015,
+      "wy1_tot": 16.571015,
+      "min_AMJJ_flow": 8.373913,
+      "min_WY_flow": 7.327174,
+      "wy4_tot": 1.046739
+    }
+  },
+  "cptable": [
+    {
+      "CP": 0.768657,
+      "nsplit": 0,
+      "rel error": 1,
+      "xerror": 1,
+      "xstd": 0.070446
+    },
+    {
+      "CP": 0.067164,
+      "nsplit": 1,
+      "rel error": 0.231343,
+      "xerror": 0.261194,
+      "xstd": 0.042174
+    },
+    {
+      "CP": 0.029851,
+      "nsplit": 2,
+      "rel error": 0.164179,
+      "xerror": 0.201493,
+      "xstd": 0.037446
+    },
+    {
+      "CP": 0.022388,
+      "nsplit": 3,
+      "rel error": 0.134328,
+      "xerror": 0.179104,
+      "xstd": 0.035446
+    },
+    {
+      "CP": 0.01,
+      "nsplit": 4,
+      "rel error": 0.11194,
+      "xerror": 0.179104,
+      "xstd": 0.035446
+    }
+  ],
+  "call": "rpart(formula = Class ~ ., data = cart_df, method = \"class\")",
+  "tree": {
+    "node_id": 1,
+    "depth": 0,
+    "n": 400,
+    "weight": 400,
+    "deviance": 134,
+    "complexity": 0.768657,
+    "is_leaf": false,
+    "predicted_class": "Success",
+    "class_counts": [
+      134,
+      266
+    ],
+    "class_probs": [
+      0.335,
+      0.665
+    ],
+    "node_prob": 1,
+    "impurity": 0.44555,
+    "split_var": "cumulative_EndOf_WY3",
+    "split": {
+      "type": "numeric",
+      "threshold": 23.113826,
+      "left_op": "<",
+      "right_op": ">="
+    },
+    "rule_from_root": [],
+    "children": [
+      {
+        "node_id": 2,
+        "depth": 1,
+        "n": 115,
+        "weight": 115,
+        "deviance": 6,
+        "complexity": 0.029851,
+        "is_leaf": false,
+        "predicted_class": "Failure",
+        "class_counts": [
+          109,
+          6
+        ],
+        "class_probs": [
+          0.947826,
+          0.052174
+        ],
+        "node_prob": 0.2875,
+        "impurity": 0.098904,
+        "split_var": "min_AMJJ_flow",
+        "split": {
+          "type": "numeric",
+          "threshold": 3.954134,
+          "left_op": "<",
+          "right_op": ">="
+        },
+        "rule_from_root": [
+          "cumulative_EndOf_WY3 < 23.11"
+        ],
+        "children": [
+          {
+            "node_id": 4,
+            "depth": 2,
+            "n": 107,
+            "weight": 107,
+            "deviance": 0,
+            "complexity": 0.01,
+            "is_leaf": true,
+            "predicted_class": "Failure",
+            "class_counts": [
+              107,
+              0
+            ],
+            "class_probs": [
+              1,
+              0
+            ],
+            "node_prob": 0.2675,
+            "impurity": 0,
+            "rule_from_root": [
+              "cumulative_EndOf_WY3 < 23.11",
+              "min_AMJJ_flow < 3.954"
+            ]
+          },
+          {
+            "node_id": 5,
+            "depth": 2,
+            "n": 8,
+            "weight": 8,
+            "deviance": 2,
+            "complexity": 0.01,
+            "is_leaf": true,
+            "predicted_class": "Success",
+            "class_counts": [
+              2,
+              6
+            ],
+            "class_probs": [
+              0.25,
+              0.75
+            ],
+            "node_prob": 0.02,
+            "impurity": 0.375,
+            "rule_from_root": [
+              "cumulative_EndOf_WY3 < 23.11",
+              "min_AMJJ_flow >= 3.954"
+            ]
+          }
+        ]
+      },
+      {
+        "node_id": 3,
+        "depth": 1,
+        "n": 285,
+        "weight": 285,
+        "deviance": 25,
+        "complexity": 0.067164,
+        "is_leaf": false,
+        "predicted_class": "Success",
+        "class_counts": [
+          25,
+          260
+        ],
+        "class_probs": [
+          0.087719,
+          0.912281
+        ],
+        "node_prob": 0.7125,
+        "impurity": 0.160049,
+        "split_var": "wy1_tot",
+        "split": {
+          "type": "numeric",
+          "threshold": 5.262068,
+          "left_op": "<",
+          "right_op": ">="
+        },
+        "rule_from_root": [
+          "cumulative_EndOf_WY3 >= 23.11"
+        ],
+        "children": [
+          {
+            "node_id": 6,
+            "depth": 2,
+            "n": 17,
+            "weight": 17,
+            "deviance": 4,
+            "complexity": 0.01,
+            "is_leaf": true,
+            "predicted_class": "Failure",
+            "class_counts": [
+              13,
+              4
+            ],
+            "class_probs": [
+              0.764706,
+              0.235294
+            ],
+            "node_prob": 0.0425,
+            "impurity": 0.359862,
+            "rule_from_root": [
+              "cumulative_EndOf_WY3 >= 23.11",
+              "wy1_tot < 5.262"
+            ]
+          },
+          {
+            "node_id": 7,
+            "depth": 2,
+            "n": 268,
+            "weight": 268,
+            "deviance": 12,
+            "complexity": 0.022388,
+            "is_leaf": false,
+            "predicted_class": "Success",
+            "class_counts": [
+              12,
+              256
+            ],
+            "class_probs": [
+              0.044776,
+              0.955224
+            ],
+            "node_prob": 0.67,
+            "impurity": 0.085542,
+            "split_var": "cumulative_EndOf_WY5",
+            "split": {
+              "type": "numeric",
+              "threshold": 37.465234,
+              "left_op": "<",
+              "right_op": ">="
+            },
+            "rule_from_root": [
+              "cumulative_EndOf_WY3 >= 23.11",
+              "wy1_tot >= 5.262"
+            ],
+            "children": [
+              {
+                "node_id": 14,
+                "depth": 3,
+                "n": 7,
+                "weight": 7,
+                "deviance": 2,
+                "complexity": 0.01,
+                "is_leaf": true,
+                "predicted_class": "Failure",
+                "class_counts": [
+                  5,
+                  2
+                ],
+                "class_probs": [
+                  0.714286,
+                  0.285714
+                ],
+                "node_prob": 0.0175,
+                "impurity": 0.408163,
+                "rule_from_root": [
+                  "cumulative_EndOf_WY3 >= 23.11",
+                  "wy1_tot >= 5.262",
+                  "cumulative_EndOf_WY5 < 37.47"
+                ]
+              },
+              {
+                "node_id": 15,
+                "depth": 3,
+                "n": 261,
+                "weight": 261,
+                "deviance": 7,
+                "complexity": 0,
+                "is_leaf": true,
+                "predicted_class": "Success",
+                "class_counts": [
+                  7,
+                  254
+                ],
+                "class_probs": [
+                  0.02682,
+                  0.97318
+                ],
+                "node_prob": 0.6525,
+                "impurity": 0.052201,
+                "rule_from_root": [
+                  "cumulative_EndOf_WY3 >= 23.11",
+                  "wy1_tot >= 5.262",
+                  "cumulative_EndOf_WY5 >= 37.47"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "performance": {
+    "positive_class": "Failure",
+    "confusion_matrix": {
+      "labels": [
+        "Failure",
+        "Success"
+      ],
+      "matrix": [
+        [
+          125,
+          6
+        ],
+        [
+          9,
+          260
+        ]
+      ]
+    },
+    "accuracy": 0.9625,
+    "accuracy_ci": [
+      0.9389,
+      0.9789
+    ],
+    "kappa": 0.9154,
+    "no_information_rate": 0.665,
+    "sensitivity": 0.9328,
+    "specificity": 0.9774,
+    "ppv": 0.9542,
+    "npv": 0.9665,
+    "prevalence": 0.335,
+    "detection_rate": 0.3125,
+    "detection_prevalence": 0.3275,
+    "balanced_accuracy": 0.9551
+  },
+  "failure_definition": "Powell pool elevation falls below 3500' at least once before EOWY5"
+}

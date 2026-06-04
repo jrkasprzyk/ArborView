@@ -1,0 +1,162 @@
+{
+  "schema": "arborview/tree@1",
+  "title": "SE Oct2025 vTC CART - EOWY1",
+  "method": "class",
+  "response": {
+    "type": "classification",
+    "levels": [
+      "Failure",
+      "Success"
+    ]
+  },
+  "variables": {
+    "predictors": [
+      "N_month_tot",
+      "wy1_tot",
+      "cumulative_EndOf_WY1",
+      "min_WY_flow",
+      "min_AMJJ_flow",
+      "monthly_avg",
+      "full_WYs_avg",
+      "wy_minus2_tot",
+      "wy_minus1_tot",
+      "pre_mdl_cumulative"
+    ],
+    "importance": {
+      "cumulative_EndOf_WY1": 29.586304,
+      "full_WYs_avg": 29.586304,
+      "min_WY_flow": 29.586304,
+      "monthly_avg": 29.586304,
+      "wy1_tot": 29.586304,
+      "min_AMJJ_flow": 25.727221
+    }
+  },
+  "cptable": [
+    {
+      "CP": 0.789474,
+      "nsplit": 0,
+      "rel error": 1,
+      "xerror": 1,
+      "xstd": 0.223901
+    },
+    {
+      "CP": 0.01,
+      "nsplit": 1,
+      "rel error": 0.210526,
+      "xerror": 0.263158,
+      "xstd": 0.11695
+    }
+  ],
+  "call": "rpart(formula = Class ~ ., data = cart_df, method = \"class\")",
+  "tree": {
+    "node_id": 1,
+    "depth": 0,
+    "n": 400,
+    "weight": 400,
+    "deviance": 19,
+    "complexity": 0.789474,
+    "is_leaf": false,
+    "predicted_class": "Success",
+    "class_counts": [
+      19,
+      381
+    ],
+    "class_probs": [
+      0.0475,
+      0.9525
+    ],
+    "node_prob": 1,
+    "impurity": 0.090488,
+    "split_var": "wy1_tot",
+    "split": {
+      "type": "numeric",
+      "threshold": 4.268185,
+      "left_op": "<",
+      "right_op": ">="
+    },
+    "rule_from_root": [],
+    "children": [
+      {
+        "node_id": 2,
+        "depth": 1,
+        "n": 23,
+        "weight": 23,
+        "deviance": 4,
+        "complexity": 0,
+        "is_leaf": true,
+        "predicted_class": "Failure",
+        "class_counts": [
+          19,
+          4
+        ],
+        "class_probs": [
+          0.826087,
+          0.173913
+        ],
+        "node_prob": 0.0575,
+        "impurity": 0.287335,
+        "rule_from_root": [
+          "wy1_tot < 4.268"
+        ]
+      },
+      {
+        "node_id": 3,
+        "depth": 1,
+        "n": 377,
+        "weight": 377,
+        "deviance": 0,
+        "complexity": 0.01,
+        "is_leaf": true,
+        "predicted_class": "Success",
+        "class_counts": [
+          0,
+          377
+        ],
+        "class_probs": [
+          0,
+          1
+        ],
+        "node_prob": 0.9425,
+        "impurity": 0,
+        "rule_from_root": [
+          "wy1_tot >= 4.268"
+        ]
+      }
+    ]
+  },
+  "performance": {
+    "positive_class": "Failure",
+    "confusion_matrix": {
+      "labels": [
+        "Failure",
+        "Success"
+      ],
+      "matrix": [
+        [
+          19,
+          4
+        ],
+        [
+          0,
+          377
+        ]
+      ]
+    },
+    "accuracy": 0.99,
+    "accuracy_ci": [
+      0.9746,
+      0.9973
+    ],
+    "kappa": 0.8995,
+    "no_information_rate": 0.9525,
+    "sensitivity": 1,
+    "specificity": 0.9895,
+    "ppv": 0.8261,
+    "npv": 1,
+    "prevalence": 0.0475,
+    "detection_rate": 0.0475,
+    "detection_prevalence": 0.0575,
+    "balanced_accuracy": 0.9948
+  },
+  "failure_definition": "Powell pool elevation falls below 3500' at least once before EOWY1"
+}
