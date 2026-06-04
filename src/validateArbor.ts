@@ -87,8 +87,14 @@ export function validateArbor(value: unknown): Arbor {
     );
   }
   const levels = response["levels"];
-  if (levels !== null && !Array.isArray(levels)) {
-    throw new Error("response.levels must be an array of strings or null");
+  if (response["type"] === "regression") {
+    if (levels !== null) {
+      throw new Error("response.levels must be null for regression models");
+    }
+  } else {
+    if (!Array.isArray(levels) || levels.some((l) => typeof l !== "string")) {
+      throw new Error("response.levels must be an array of strings for classification models");
+    }
   }
 
   // --- variables ---
