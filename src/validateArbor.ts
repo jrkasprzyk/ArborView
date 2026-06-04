@@ -6,10 +6,10 @@
  * or a tree from a future schema this build can't render.  `validateArbor`
  * walks the parsed JSON and either returns it typed as `Arbor`, or throws an
  * `Error` whose message names the offending field/node.
- *
  * This is the primary half of REQ-005 ("MUST NOT crash" = validated-or-caught);
- * the upload render call in main.ts is wrapped in try/catch as the backstop.
- *
+ * the upload render call (the initUpload onLoad callback) is wrapped in try/catch
+ * in upload.ts as the backstop so any residual render error becomes an in-modal
+ * message rather than an app crash.
  * Validation walks the tree RECURSIVELY — root-only checks gave false
  * confidence against a deep hand-edit that breaks a leaf far from the root.
  */
