@@ -217,6 +217,131 @@ html, body {
   color: var(--accent);
 }
 
+/* Top-bar provenance label naming the currently-viewed model. */
+.model-source {
+  font-size: 12px;
+  color: var(--muted);
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- Buttons ------------------------------------------------------------ */
+
+.btn {
+  font-family: var(--sans);
+  font-size: 13px;
+  padding: 6px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+.btn:hover { background: var(--panel); border-color: var(--accent-soft); }
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover { background: #b04f17; border-color: #b04f17; }
+
+/* ---- Upload modal ------------------------------------------------------- */
+
+.upload-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(16, 18, 23, 0.45);
+}
+.upload-modal[hidden] { display: none; }
+
+.upload-dialog {
+  width: 100%;
+  max-width: 480px;
+  background: var(--panel);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 24px 26px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+.upload-title {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.upload-intro { margin: 0 0 18px; font-size: 13px; line-height: 1.5; }
+.upload-intro code {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent);
+}
+
+.upload-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 16px;
+}
+.upload-field > span {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.upload-field > span em {
+  text-transform: none;
+  letter-spacing: normal;
+  font-style: normal;
+  color: var(--muted);
+  opacity: 0.8;
+}
+.upload-field > span code {
+  font-family: var(--mono);
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--accent);
+}
+
+.upload-field input[type="text"],
+.upload-field textarea {
+  font-family: var(--sans);
+  font-size: 13px;
+  padding: 7px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--ink);
+  resize: vertical;
+}
+.upload-field input[type="file"] { font-size: 12.5px; }
+
+.upload-error {
+  margin: 0 0 16px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: color-mix(in srgb, #b03a2e 8%, transparent);
+  color: #b03a2e;
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.upload-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
 .layout {
   display: grid;
   grid-template-columns: 1fr 5px var(--sidebar-w);

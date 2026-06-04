@@ -20,6 +20,7 @@ import type { Arbor, Manifest, ManifestEntry, Performance, TreeNode } from "./ty
 import { renderTree } from "./tree";
 import { positionTooltip, renderTooltip, splitLabel } from "./tooltip";
 import { escapeHtml, formatNum, semanticColor } from "./utils";
+import { initUpload } from "./upload";
 
 // D3 adds x/y coordinates to each TreeNode when it lays out the tree.
 // "Hier" is shorthand for that augmented type.
@@ -43,6 +44,7 @@ const tooltipEl     = $<HTMLDivElement>("#tooltip");
 const canvasEl      = $<HTMLElement>(".canvas");
 const datasetSelect = $<HTMLSelectElement>("#dataset-select");
 const responseBadge = $<HTMLSpanElement>("#response-badge");
+const modelSourceEl = $<HTMLSpanElement>("#model-source");
 const breadcrumbEl  = $<HTMLOListElement>("#breadcrumb");
 const detailEl      = $<HTMLDivElement>("#node-detail");
 const importanceEl      = $<HTMLUListElement>("#importance");
@@ -198,7 +200,18 @@ async function bootstrap(): Promise<void> {
     if (entry) void loadDataset(entry);
   });
 
-  // Step 4: load the first dataset immediately.
+  // Step 4: wire up the "Load your own…" upload workflow.  The callback is the
+  // bridge from upload.ts (which assembles + validates the Arbor) back into the
+  // render pipeline shared with the manifest path.  Any error renderArbor throws
+  // propagates back into upload.ts's atomic Apply handler (REQ-005 backstop),
+  // which keeps the modal open and shows the message rather than crashing.
+  initUpload((arbor, sourceLabel) => {
+    renderArbor(arbor);
+    showUploadedOption(sourceLabel);
+    setModelSource(sourceLabel);
+  });
+
+  // Step 5: load the first dataset immediately.
   await loadDataset(manifest.datasets[0]);
 }
 
@@ -207,10 +220,24 @@ async function bootstrap(): Promise<void> {
 // ---------------------------------------------------------------------------
 
 async function loadDataset(entry: ManifestEntry): Promise<void> {
-  // Keep the dropdown in sync when loadDataset is called programmatically.
+  // A manifest dataset was chosen, so drop any transient "Uploaded: …" option
+  // and keep the dropdown in sync when loadDataset is called programmatically.
+  removeUploadedOption();
   datasetSelect.value = entry.file;
 
   const arbor: Arbor = await fetchJson(`data/${entry.file}`);
+  renderArbor(arbor);
+  setModelSource(entry.label);
+}
+
+/**
+ * Render an already-fetched/validated Arbor into the visualizer.
+ *
+ * This is the shared render entry point used by BOTH the manifest dropdown path
+ * (loadDataset) and the upload path (initUpload callback).  It must not assume a
+ * manifest entry exists — everything it needs comes from the Arbor itself.
+ */
+function renderArbor(arbor: Arbor): void {
   currentArbor = arbor;
   selected = null;  // clear any previously selected node
 
@@ -251,6 +278,41 @@ async function loadDataset(entry: ManifestEntry): Promise<void> {
       showBreadcrumb(node);
     },
   });
+}
+
+// ---------------------------------------------------------------------------
+// Model provenance label (top bar) + transient "uploaded" dropdown option
+// ---------------------------------------------------------------------------
+
+/**
+ * Set the top-bar provenance label naming the currently-viewed model.
+ * Uses textContent (not innerHTML) because the upload path feeds user-supplied
+ * strings (filename / free-text label) into this sink — SEC-001.
+ */
+function setModelSource(label: string): void {
+  modelSourceEl.textContent = label;
+}
+
+/**
+ * Insert (or update) a transient, disabled <option> in the dataset dropdown so
+ * the widget reflects that an off-manifest, uploaded model is being viewed.
+ * Removed again as soon as a manifest dataset is chosen.
+ */
+function showUploadedOption(label: string): void {
+  let opt = datasetSelect.querySelector<HTMLOptionElement>('option[data-uploaded="true"]');
+  if (!opt) {
+    opt = document.createElement("option");
+    opt.dataset.uploaded = "true";
+    opt.value = "";
+    opt.disabled = true;
+    datasetSelect.appendChild(opt);
+  }
+  opt.textContent = `Uploaded: ${label}`;
+  opt.selected = true;
+}
+
+function removeUploadedOption(): void {
+  datasetSelect.querySelector('option[data-uploaded="true"]')?.remove();
 }
 
 // ---------------------------------------------------------------------------

@@ -15,6 +15,17 @@ ArborView is an interactive web-based visualization tool for CART (Classificatio
 9. **Check variable importance** in the sidebar — the chart shows which predictors contributed most to splits in the tree, normalised so the most important variable is always the full bar width.
 10. **Review model performance** in the "Model performance" panel at the bottom of the sidebar. When performance data is available it shows a confusion matrix (rows = predicted class, columns = reference class) and key classification statistics including accuracy, kappa, sensitivity, specificity, PPV/NPV, and balanced accuracy. Hover any metric label for a plain-English definition.
 
+## Load Your Own Data
+
+Besides the bundled example datasets, you can render your own model entirely in the browser — no R or server upload required. Click **Load your own…** in the header and supply:
+
+1. **Tree JSON** *(required)* — a model exported by `R/export_tree.R` in the `arborview/tree@1` schema. This is the same structured tree format used by the example datasets; ArborView does not build trees from raw `rpart` models or CSV files. The file is validated before rendering, and an invalid file shows a readable error rather than crashing the app.
+2. **Performance `.txt`** *(optional)* — the text captured from a caret `confusionMatrix()` call, the same format consumed by `R/add_performance.R`. It is parsed in the browser and shown in the **Model performance** panel. Performance is **classification-only**, and its class labels **must match the model's classes exactly (same order)** — a regression model, mismatched labels, or a positive class outside the model's classes is rejected with an error naming both label lists. Upload a tree without performance and the panel simply shows a placeholder.
+3. **Failure definition sentence** *(optional)* — free text describing the condition of interest, populating the Failure Definition overlay (the same field `R/add_failure_definition.R` sets).
+4. **Source label** *(optional)* — the label shown in the top bar for the loaded model. It defaults to the JSON **filename**: a browser file picker only exposes the filename, never the absolute path, so you may override it with anything more descriptive.
+
+Everything is read locally with the browser's file API — no upload contents are sent to any server. The example datasets in the dropdown remain available; loading your own data is additive.
+
 ## Understanding CART Trees
 
 CART stands for **Classification and Regression Trees**. The algorithm recursively partitions the training data into increasingly pure subgroups, based on the values of predictor variables.
