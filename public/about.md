@@ -79,7 +79,7 @@ Performance data is added to a dataset's JSON file by running `R/add_performance
 
 Predictor variable descriptions depend on the specific model and dataset loaded. Refer to the dataset documentation provided alongside each model for definitions of individual predictor names.
 
-The **Variable importance** panel ranks predictors by their total contribution to impurity reduction across all splits in the tree. A predictor can appear as important even if it is not used at the root split — it may be used repeatedly at deeper levels.
+The **Variable importance** panel ranks predictors by their total contribution to impurity reduction for variables used in the tree's actual splits. A predictor can appear as important even if it is not used at the root split — it may be used repeatedly at deeper levels.
 
 ---
 
