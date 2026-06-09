@@ -71,7 +71,7 @@ function validateNode(value: unknown, path: string): void {
  * rendered without any validation.  Confusion-matrix cells reach an innerHTML
  * sink in main.ts, so a hand-crafted string cell was an XSS vector.  Enforce
  * the shape the renderer assumes: string labels, a square integer matrix of
- * matching size, and numeric (or null, R's NA) statistics.
+ * matching size, and numeric statistics.
  */
 function validatePerformance(value: unknown): void {
   if (!isObject(value)) {
@@ -122,9 +122,8 @@ function validatePerformance(value: unknown): void {
   ] as const;
   for (const k of numericStats) {
     const v = value[k];
-    // null is R's NA_real_ serialised by toJSON(na = "null").
-    if (v !== null && typeof v !== "number") {
-      throw new Error(`performance.${k} must be a number or null`);
+    if (typeof v !== "number") {
+      throw new Error(`performance.${k} must be a number`);
     }
   }
 }

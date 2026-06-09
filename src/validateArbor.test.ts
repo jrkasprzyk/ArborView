@@ -78,10 +78,10 @@ describe("validateArbor rejects malformed input", () => {
     expect(() => validateArbor(bad)).toThrow(/kappa/);
   });
 
-  it("accepts null statistics (R's NA_real_)", () => {
-    const ok = base();
-    (ok["performance"] as any).kappa = null;
-    expect(() => validateArbor(ok)).not.toThrow();
+  it("rejects null statistics", () => {
+    const bad = base();
+    (bad["performance"] as any).kappa = null;
+    expect(() => validateArbor(bad)).toThrow(/kappa/);
   });
 
   it("deeply-nested malformed child exercises the recursive walk", () => {
