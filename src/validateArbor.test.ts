@@ -31,7 +31,7 @@ describe("validateArbor accepts every shipped dataset", () => {
 
 describe("validateArbor rejects malformed input", () => {
   // Start from a known-good tree so each case isolates a single defect.
-  const base = () => loadJson("EOWY1_classification.json") as Record<string, unknown>;
+  const base = () => loadJson("EOWY1_vTC_classification.json") as Record<string, unknown>;
 
   it("wrong schema -> version-aware message", () => {
     const bad = base();
@@ -50,6 +50,38 @@ describe("validateArbor rejects malformed input", () => {
     const bad = base();
     (bad["response"] as Record<string, unknown>)["type"] = "clustering";
     expect(() => validateArbor(bad)).toThrow(/response\.type/);
+  });
+
+  it("rejects a string confusion-matrix cell in an embedded performance block (SEC-002)", () => {
+    const bad = base();
+    const perf = bad["performance"] as any;
+    expect(perf).toBeTruthy();
+    perf.confusion_matrix.matrix[0][0] = "<img src=x onerror=alert(1)>";
+    expect(() => validateArbor(bad)).toThrow(/matrix/);
+  });
+
+  it("rejects a non-object embedded performance block", () => {
+    const bad = base();
+    bad["performance"] = "not an object";
+    expect(() => validateArbor(bad)).toThrow(/performance/);
+  });
+
+  it("rejects non-string confusion-matrix labels", () => {
+    const bad = base();
+    (bad["performance"] as any).confusion_matrix.labels = [1, 2];
+    expect(() => validateArbor(bad)).toThrow(/labels/);
+  });
+
+  it("rejects a non-numeric statistic in an embedded performance block", () => {
+    const bad = base();
+    (bad["performance"] as any).kappa = "<script>alert(1)</script>";
+    expect(() => validateArbor(bad)).toThrow(/kappa/);
+  });
+
+  it("rejects null statistics", () => {
+    const bad = base();
+    (bad["performance"] as any).kappa = null;
+    expect(() => validateArbor(bad)).toThrow(/kappa/);
   });
 
   it("deeply-nested malformed child exercises the recursive walk", () => {

@@ -30,11 +30,11 @@ const NUMERIC_FIELDS: (keyof Performance)[] = [
 ];
 
 function readTxt(k: number): string {
-  return readFileSync(`example_data/SE_Oct2025_CART_performance_P3500_EOWY${k}.txt`, "utf8");
+  return readFileSync(`example_data/SE_Oct2025_vTC_CART_performance_P3500_EOWY${k}.txt`, "utf8");
 }
 
 function readExpected(k: number): Performance {
-  const json = JSON.parse(readFileSync(`public/data/EOWY${k}_classification.json`, "utf8"));
+  const json = JSON.parse(readFileSync(`public/data/EOWY${k}_vTC_classification.json`, "utf8"));
   return json.performance as Performance;
 }
 

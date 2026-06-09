@@ -131,11 +131,17 @@ export function initUpload(onLoad: (arbor: Arbor, sourceLabel: string) => void):
       const arbor = validateArbor(JSON.parse(await jsonFile.text()));
 
       // Optional performance.txt — parse, reconcile against the tree, THEN attach.
+      // It replaces any performance block embedded in the tree JSON itself.
       const perfFile = perfInput.files?.[0];
       if (perfFile) {
         const perf = parsePerformanceTxt(await perfFile.text());
         reconcilePerformance(perf, arbor);
         arbor.performance = perf;
+      } else if (arbor.performance) {
+        // A performance block embedded in the uploaded JSON (the
+        // R/add_performance.R workflow) gets the same labels/positive-class
+        // cross-check as a separately uploaded .txt (REQ-008).
+        reconcilePerformance(arbor.performance, arbor);
       }
 
       // Optional failure-definition sentence (free text; ungated on regression).

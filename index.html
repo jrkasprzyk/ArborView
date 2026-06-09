@@ -3,6 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <!--
+      Defense-in-depth CSP: same-origin everything, no eval, no plugins.
+      style-src 'unsafe-inline' is required because the app sets inline style
+      attributes (bar widths, tooltip positions) and Vite injects <style> tags
+      in dev.  The ws://localhost entries keep Vite HMR working in dev and are
+      meaningless when the built site is served over https.
+    -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' ws://localhost:* ws://127.0.0.1:*; object-src 'none'; base-uri 'none'; form-action 'none'" />
     <title>ArborView</title>
     <link rel="stylesheet" href="/src/styles.css" />
   </head>
