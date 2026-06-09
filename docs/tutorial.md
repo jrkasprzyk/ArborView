@@ -78,7 +78,7 @@ Dragging a node only moves it on screen — it never changes the tree's structur
 
 ## Step 7 — Read the variable-importance chart
 
-Find the **Variable importance** panel in the sidebar. Each bar shows how much a predictor contributed to the tree overall, normalised so the most important variable fills the full width.
+Find the **Variable importance** panel in the sidebar. Each bar shows how much a predictor contributed among the variables that actually appear in tree splits, normalised so the most important shown variable fills the full width.
 
 Notice that an important variable is not always the one used at the very top split — a predictor can earn importance by being reused at several deeper splits.
 

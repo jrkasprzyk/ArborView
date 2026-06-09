@@ -8,6 +8,8 @@ CART stands for **Classification And Regression Trees**. The algorithm starts wi
 
 To make a prediction for a new observation, you start at the root and follow the split rules — left or right at each node — until you land in a leaf. The leaf's summary *is* the prediction.
 
+Each internal node uses one primary split variable to perform the split. CART implementations like R's `rpart` also keep track of surrogate splits as alternate predictors to use only when the primary predictor's value is missing for a new observation.
+
 This is why ArborView centres on the tree shape and the decision path: the structure is the model. A tree is unusually honest about its own reasoning, which is exactly what makes it worth visualizing rather than reducing to a single accuracy number.
 
 ### Classification vs regression trees

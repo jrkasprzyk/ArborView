@@ -21,6 +21,7 @@ import { renderTree } from "./tree";
 import { positionTooltip, renderTooltip, splitLabel } from "./tooltip";
 import { escapeHtml, formatNum, semanticColor } from "./utils";
 import { initUpload } from "./upload";
+import { getTreeImportanceEntries } from "./importance";
 
 // D3 adds x/y coordinates to each TreeNode when it lays out the tree.
 // "Hier" is shorthand for that augmented type.
@@ -625,7 +626,7 @@ setupMetricTooltips();
  */
 function renderImportance(arbor: Arbor): void {
   importanceEl.innerHTML = "";
-  const entries = Object.entries(arbor.variables.importance);
+  const entries = getTreeImportanceEntries(arbor);
 
   if (entries.length === 0) {
     importanceEl.innerHTML = `<li class="muted">No variable importance reported.</li>`;
