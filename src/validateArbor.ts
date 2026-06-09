@@ -63,6 +63,72 @@ function validateNode(value: unknown, path: string): void {
   }
 }
 
+/**
+ * Validate an embedded `performance` block (SEC-002).
+ *
+ * A tree JSON produced by R/add_performance.R legitimately carries a
+ * `performance` object, so uploads may include one — but until now it was
+ * rendered without any validation.  Confusion-matrix cells reach an innerHTML
+ * sink in main.ts, so a hand-crafted string cell was an XSS vector.  Enforce
+ * the shape the renderer assumes: string labels, a square integer matrix of
+ * matching size, and numeric (or null, R's NA) statistics.
+ */
+function validatePerformance(value: unknown): void {
+  if (!isObject(value)) {
+    throw new Error("performance must be an object");
+  }
+
+  if (typeof value["positive_class"] !== "string") {
+    throw new Error("performance.positive_class must be a string");
+  }
+
+  const cm = value["confusion_matrix"];
+  if (!isObject(cm)) {
+    throw new Error("performance.confusion_matrix must be an object");
+  }
+  const labels = cm["labels"];
+  if (!Array.isArray(labels) || labels.length === 0 || labels.some((l) => typeof l !== "string")) {
+    throw new Error("performance.confusion_matrix.labels must be a non-empty array of strings");
+  }
+  const matrix = cm["matrix"];
+  if (
+    !Array.isArray(matrix) ||
+    matrix.length !== labels.length ||
+    matrix.some(
+      (row) =>
+        !Array.isArray(row) ||
+        row.length !== labels.length ||
+        row.some((cell) => typeof cell !== "number" || !Number.isInteger(cell)),
+    )
+  ) {
+    throw new Error(
+      `performance.confusion_matrix.matrix must be a ${labels.length}×${labels.length} array of integers`,
+    );
+  }
+
+  const ci = value["accuracy_ci"];
+  if (
+    !Array.isArray(ci) ||
+    ci.length !== 2 ||
+    ci.some((v) => v !== null && typeof v !== "number")
+  ) {
+    throw new Error("performance.accuracy_ci must be a 2-element array of numbers or nulls");
+  }
+
+  const numericStats = [
+    "accuracy", "kappa", "no_information_rate", "sensitivity", "specificity",
+    "ppv", "npv", "prevalence", "detection_rate", "detection_prevalence",
+    "balanced_accuracy",
+  ] as const;
+  for (const k of numericStats) {
+    const v = value[k];
+    // null is R's NA_real_ serialised by toJSON(na = "null").
+    if (v !== null && typeof v !== "number") {
+      throw new Error(`performance.${k} must be a number or null`);
+    }
+  }
+}
+
 export function validateArbor(value: unknown): Arbor {
   if (!isObject(value)) {
     throw new Error("uploaded JSON is not an object");
@@ -107,6 +173,11 @@ export function validateArbor(value: unknown): Arbor {
   }
   if (!isObject(variables["importance"])) {
     throw new Error("variables.importance must be an object");
+  }
+
+  // --- performance (optional, but never rendered unvalidated — SEC-002) ---
+  if (value["performance"] !== undefined && value["performance"] !== null) {
+    validatePerformance(value["performance"]);
   }
 
   // --- tree (recursive) ---

@@ -537,8 +537,10 @@ function renderPerformance(perf: Performance | undefined): void {
   const headerCells = labels.map((l) => `<th>${escapeHtml(l)}</th>`).join("");
   const matRows = perf.confusion_matrix.matrix
     .map((row, i) => {
+      // Number() guards the innerHTML sink even if a non-numeric cell ever
+      // slips past validation (SEC-002): a non-number renders as NaN, not markup.
       const cells = row
-        .map((v, j) => `<td class="${i === j ? "cm-correct" : "cm-error"}">${v}</td>`)
+        .map((v, j) => `<td class="${i === j ? "cm-correct" : "cm-error"}">${Number(v)}</td>`)
         .join("");
       return `<tr><th>${escapeHtml(labels[i])}</th>${cells}</tr>`;
     })
