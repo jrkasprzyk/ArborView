@@ -7,6 +7,7 @@ Exact, lookup-oriented details for ArborView. For task instructions see the [how
 - [Requirements](#requirements)
 - [Adding Rscript to PATH](#adding-rscript-to-path)
 - [npm scripts](#npm-scripts)
+- [Tech stack](#tech-stack)
 - [R scripts](#r-scripts)
 - [Project structure](#project-structure)
 - [Class-colour CSS variables](#class-colour-css-variables)
@@ -16,6 +17,8 @@ Exact, lookup-oriented details for ArborView. For task instructions see the [how
 ---
 
 ## Requirements
+
+The deployed app at <https://arborview-delta.vercel.app/> requires nothing — just a web browser. The requirements below apply only when running from source or exporting your own models:
 
 - **Node.js** 18+ and npm.
 - **R** with packages `rpart`, `jsonlite` (and `partykit` for some workflows) — only needed to export your own models.
@@ -60,11 +63,27 @@ Then add that `bin` directory to your user PATH (Start → **Edit environment va
 
 ## npm scripts
 
+These commands apply only when running ArborView from source.
+
 | Command | Description |
 |---|---|
 | `npm run dev` | Start the Vite development server. |
 | `npm run build` | Type-check with `tsc` and bundle for production. |
 | `npm run preview` | Serve the production build locally. |
+| `npm run test` | Run the test suite once. |
+
+## Tech stack
+
+| Layer | Technology |
+|---|---|
+| Language | TypeScript (vanilla DOM — no UI framework) |
+| Tree rendering | D3.js |
+| Tooltips | Floating UI (`@floating-ui/dom`) |
+| About page | marked (Markdown) + DOMPurify (sanitisation) |
+| Model export | R with `rpart` + `jsonlite` |
+| Build tool | Vite |
+| Tests | Vitest |
+| Hosting | Vercel (static build of `dist/`) |
 
 ## R scripts
 

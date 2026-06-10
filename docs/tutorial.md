@@ -1,43 +1,50 @@
 # Tutorial: Explore your first tree in ArborView
 
-This lesson walks you from a fresh clone to confidently reading a decision tree on screen. By the end you will have the app running locally and will understand what every part of the screen is telling you.
+This lesson walks you from a blank browser tab to confidently reading a decision tree on screen. By the end you will have the app open and will understand what every part of the screen is telling you.
 
 You do **not** need R for this tutorial. ArborView ships with sample datasets, and we will explore one of them — a small regression tree built from R's built-in `mtcars` data.
 
 **Time:** about 10 minutes.
-**You will need:** Node.js 18 or newer (this includes `npm`).
-
-> Not sure if Node is installed? Run `node --version`. If you see a version number of 18 or higher, you are ready. If the command is not found, install Node from https://nodejs.org and reopen your terminal.
+**You will need:** a web browser. Node.js 18 or newer (this includes `npm`) only if you choose to run locally in Step 1.
 
 ---
 
-## Step 1 — Get the code and install dependencies
+## Step 1 — Open the app
 
-Clone the repository (or download it) and install the front-end packages:
+There are two ways to open ArborView. Pick whichever suits you — every later step is identical.
+
+### Option A: Use the deployed app (nothing to install)
+
+Visit <https://arborview-delta.vercel.app/> in your browser.
+
+### Option B: Run it locally
+
+> Not sure if Node is installed? Run `node --version`. If you see a version number of 18 or higher, you are ready. If the command is not found, install Node from https://nodejs.org and reopen your terminal.
+
+Clone the repository (or download it), install the front-end packages, and start the development server:
 
 ```bash
-git clone https://github.com/jrkasprzyk/ensemble-viewer.git
-cd ensemble-viewer
+git clone https://github.com/jrkasprzyk/ArborView.git
+cd ArborView
 npm install
+npm run dev
 ```
 
 `npm install` reads `package.json` and downloads D3, the tooltip library, and the Vite build tool into a local `node_modules/` folder. This runs once; you will not repeat it each session.
 
-## Step 2 — Start the development server
-
-```bash
-npm run dev
-```
-
-Vite compiles the app and prints a local URL, usually:
+`npm run dev` compiles the app with Vite and prints a local URL, usually:
 
 ```text
   ➜  Local:   http://localhost:5173/
 ```
 
-Open that URL in your browser. You should see the ArborView header with a dataset dropdown, a large canvas, and a sidebar on the right.
+Open that URL in your browser.
 
-## Step 3 — Choose the mtcars dataset
+### What you should see
+
+Either way, the page shows the ArborView header with a dataset dropdown, a large canvas, and a sidebar on the right.
+
+## Step 2 — Choose the mtcars dataset
 
 In the header dropdown, select **mtcars mpg (regression)**.
 
@@ -49,7 +56,7 @@ Take a moment to notice:
 - **Lines are splits.** Each line is labelled with the rule that sends cars left or right, for example `cyl >= 5`.
 - **The top node is the root** — every car starts here before the tree sorts it down to a leaf.
 
-## Step 4 — Hover a node to read its statistics
+## Step 3 — Hover a node to read its statistics
 
 Move your mouse over any node. A tooltip appears, and the sidebar panels update to describe that node:
 
@@ -58,7 +65,7 @@ Move your mouse over any node. A tooltip appears, and the sidebar panels update 
 
 Hover a few different nodes and watch how the predicted value changes as you move toward the leaves. Deeper leaves describe narrower, more specific groups of cars.
 
-## Step 5 — Click a node to pin it
+## Step 4 — Click a node to pin it
 
 Hovering is exploratory; clicking commits. **Click** a leaf node near the bottom of the tree.
 
@@ -66,7 +73,7 @@ The sidebar now stays focused on that node even as you move your mouse elsewhere
 
 Click the canvas background to unpin.
 
-## Step 6 — Pan, zoom, and tidy the layout
+## Step 5 — Pan, zoom, and tidy the layout
 
 The canvas is interactive:
 
@@ -76,7 +83,7 @@ The canvas is interactive:
 
 Dragging a node only moves it on screen — it never changes the tree's structure or statistics. Use it to untangle crowded branches.
 
-## Step 7 — Read the variable-importance chart
+## Step 6 — Read the variable-importance chart
 
 Find the **Variable importance** panel in the sidebar. Each bar shows how much a predictor contributed among the variables that actually appear in tree splits, normalised so the most important shown variable fills the full width.
 
@@ -88,7 +95,7 @@ Notice that an important variable is not always the one used at the very top spl
 
 You can now:
 
-- run ArborView locally with `npm run dev`,
+- open ArborView in the browser (deployed, or locally with `npm run dev`),
 - load a dataset and read the tree, tooltip, and sidebar panels,
 - pin a node and trace its decision path,
 - pan, zoom, and rearrange the canvas,

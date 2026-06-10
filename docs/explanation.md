@@ -63,7 +63,7 @@ The R exporter walks the fitted `rpart` object and pre-computes everything the v
 
 This separation has real benefits:
 
-- **No R runtime in the browser.** The deployed app is static files — it hosts anywhere (the live demo runs on Vercel) and loads instantly.
+- **No R runtime in the browser.** The deployed app is static files — it hosts anywhere (the [live demo](https://arborview-delta.vercel.app/) runs on Vercel) and loads instantly.
 - **Reproducibility.** The JSON is a frozen snapshot of a specific fitted model. Re-running the app never re-fits or re-randomises anything.
 - **A stable contract.** The `schema` field (`arborview/tree@1`) versions the format, so the R and TypeScript sides can evolve independently as long as they agree on the schema.
 

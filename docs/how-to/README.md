@@ -2,6 +2,8 @@
 
 Each guide here solves one specific task and assumes you already know your way around the app. If you are brand new, do the [tutorial](../tutorial.md) first.
 
+Unlike browsing the built-in datasets — which works equally well on the [deployed app](https://arborview-delta.vercel.app/) — every guide below changes files in the repository, so you need a local clone running `npm run dev` (see the [README quick start](../../README.md#run-locally)).
+
 ## Bringing your model into ArborView
 
 - [Export an rpart model to JSON](export-a-model.md)
